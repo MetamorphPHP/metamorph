@@ -1,0 +1,7 @@
+.DS_STORE
+.idea/
+bin/
+composer.phar
+composer.lock
+tests/_support/_generated
+vendor/

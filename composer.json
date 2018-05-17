@@ -1,0 +1,28 @@
+{
+  "name": "metamorph/metamorph",
+  "type": "library",
+  "description": "Transformation library",
+  "keywords": ["transformer"],
+  "license": "MIT",
+  "require": {
+    "nette/php-generator": "^3.1@dev",
+    "php": ">=7.1"
+  },
+  "require-dev": {
+    "codeception/aspect-mock": "dev-master",
+    "codeception/codeception": "^2.3.8"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Metamorph\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\Fixture\\": "tests/_support/Fixture",
+      "Tests\\Functional\\": "tests/functional",
+      "Tests\\Unit\\": "tests/unit"
+    }
+  }
+}
