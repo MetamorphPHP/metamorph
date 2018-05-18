@@ -5,11 +5,10 @@
   "keywords": ["transformer"],
   "license": "MIT",
   "require": {
-    "nette/php-generator": "^3.1@dev",
-    "php": ">=7.1"
+    "php": ">=7.1",
+    "nikic/php-parser": "^4.0@dev"
   },
   "require-dev": {
-    "codeception/aspect-mock": "dev-master",
     "codeception/codeception": "^2.3.8"
   },
   "minimum-stability": "dev",

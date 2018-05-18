@@ -5,6 +5,12 @@ namespace Tests\Unit\Factory;
 
 use Metamorph\Context\UsageTypeContext;
 use Metamorph\Factory\UsageTypeContextFactory;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use Tests\Fixture\TestUser;
 use UnitTester;
 
@@ -19,16 +25,25 @@ class UsageTypeContextFactoryCest
 
     public function testCreateObject(UnitTester $I)
     {
-        $this->usageContextFactory->create('object', 'user');
+        $context = $this->usageContextFactory->create('object', 'user');
+
+        $I->assertEquals($this->expectedObjectContext(), $context);
     }
 
+    public function testCreateArray(UnitTester $I)
+    {
+        $context = $this->usageContextFactory->create('array', 'user');
+
+        $I->assertEquals($this->expectedArrayContext(), $context); 
+    }
+    
     private function config(): array
     {
         return [
             'objects' => [
                 'user' => [
                     'class'      => TestUser::class,
-                    'path'       => __DIR__.'../../_support/Fixture/Transformer',
+                    'path'       => __DIR__.'/../../_support/Fixture/Transformer',
                     'namespace'  => 'Tests\Fixture\Transformer',
                     'properties' => [
                         'allowed'   => [
@@ -47,17 +62,33 @@ class UsageTypeContextFactoryCest
                     ],
                 ],
             ],
+            'transformers' => [
+                'array' => [
+                    'user' => [
+                        'class' => null,
+                        'properties' => [
+                            'birthday' => [
+                                'type' => 'ISO8601',
+                                'name' => 'birth_day',
+                            ],
+                            'id' => [
+                                'type' => 'string',
+                            ]
+                        ],
+                    ],
+                ]
+            ],
         ];
     }
 
     private function expectedObjectContext(): UsageTypeContext
     {
         $getters = [
-            'allowed'   => '$user->isAllowed()',
-            'birthday'  => '$user->birthday',
-            'id'        => '$user->getId()',
-            'qualified' => '$user->getQualified()',
-            'username'  => '$user->getUsername()',
+            'allowed'   => new MethodCall(new Variable('user'), new Identifier('isAllowed')),
+            'birthday'   => new PropertyFetch(new Variable('user'), new Identifier('birthday')),
+            'id'   => new MethodCall(new Variable('user'), new Identifier('getId')),
+            'qualified'   => new MethodCall(new Variable('user'), new Identifier('getQualified')),
+            'username'   => new MethodCall(new Variable('user'), new Identifier('getUsername')),
         ];
         $properties = [
             'allowed'   => 'allowed',
@@ -67,11 +98,11 @@ class UsageTypeContextFactoryCest
             'username'  => 'username',
         ];
         $setters = [
-            'allowed'   => '$user->setAllowed(%_DATA_%)',
-            'birthday'  => '$user->birthday = %_DATA_%',
-            'id'        => '$user->setId(%_DATA_%)',
-            'qualified' => '$user->setQualified(%_DATA_%)',
-            'username'  => '$user->setUsername(%_DATA_%)',
+            'allowed'   => [new Variable('user'), new Identifier('setAllowed')],
+            'birthday'   => new PropertyFetch(new Variable('user'), new Identifier('birthday')),
+            'id'   => [new Variable('user'), new Identifier('setId')],
+            'qualified'   => [new Variable('user'), new Identifier('setQualified')],
+            'username'   => [new Variable('user'), new Identifier('setUsername')],
         ];
 
         return (new UsageTypeContext())
@@ -83,5 +114,40 @@ class UsageTypeContextFactoryCest
             ->setProperties($properties)
             ->setSetters($setters)
             ->setUsage('object');
+    }
+    
+    private function expectedArrayContext(): UsageTypeContext
+    {
+        $getters = [
+            'allowed'   => new ArrayDimFetch(new Variable('user'), new String_('allowed')),
+            'birthday'   => new ArrayDimFetch(new Variable('user'), new String_('birth_day')),
+            'id'   => new ArrayDimFetch(new Variable('user'), new String_('id')),
+            'qualified'   => new ArrayDimFetch(new Variable('user'), new String_('qualified')),
+            'username'   => new ArrayDimFetch(new Variable('user'), new String_('username')),
+        ];
+        $properties = [
+            'allowed'   => 'allowed',
+            'birthday'  => 'birth_day',
+            'id'        => 'id',
+            'qualified' => 'qualified',
+            'username'  => 'username',
+        ];
+        $setters = [
+            'allowed'   => new ArrayDimFetch(new Variable('user'), new String_('allowed')),
+            'birthday'   => new ArrayDimFetch(new Variable('user'), new String_('birth_day')),
+            'id'   => new ArrayDimFetch(new Variable('user'), new String_('id')),
+            'qualified'   => new ArrayDimFetch(new Variable('user'), new String_('qualified')),
+            'username'   => new ArrayDimFetch(new Variable('user'), new String_('username')),
+        ];
+
+        return (new UsageTypeContext())
+            ->setClass(null)
+            ->setGetters($getters)
+            ->setName('user')
+            ->setNamespace('Tests\Fixture\Transformer')
+            ->setPath(__DIR__.'/../../_support/Fixture/Transformer')
+            ->setProperties($properties)
+            ->setSetters($setters)
+            ->setUsage('array');
     }
 }

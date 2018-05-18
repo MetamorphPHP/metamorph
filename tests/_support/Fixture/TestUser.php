@@ -40,7 +40,7 @@ class TestUser
         return $this;
     }
 
-    public function isQualified(): bool
+    public function getQualified(): bool
     {
         return $this->qualified;
     }

@@ -32,7 +32,7 @@ class UsageTypeContext
         return !empty($this->class);
     }
 
-    public function setClass(string $class): UsageTypeContext
+    public function setClass(?string $class): UsageTypeContext
     {
         $this->class = $class;
 
