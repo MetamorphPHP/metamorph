@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
+use Tests\Fixture\TestConfig;
 use Tests\Fixture\TestUser;
 use UnitTester;
 
@@ -20,7 +21,7 @@ class UsageTypeContextFactoryCest
 
     public function __construct()
     {
-        $this->usageContextFactory = new UsageTypeContextFactory($this->config());
+        $this->usageContextFactory = new UsageTypeContextFactory(TestConfig::get());
     }
 
     public function testCreateObject(UnitTester $I)
@@ -35,50 +36,6 @@ class UsageTypeContextFactoryCest
         $context = $this->usageContextFactory->create('array', 'user');
 
         $I->assertEquals($this->expectedArrayContext(), $context); 
-    }
-    
-    private function config(): array
-    {
-        return [
-            'objects' => [
-                'user' => [
-                    'class'      => TestUser::class,
-                    'path'       => __DIR__.'/../../_support/Fixture/Transformer',
-                    'namespace'  => 'Tests\Fixture\Transformer',
-                    'properties' => [
-                        'allowed'   => [
-                            'type' => 'bool',
-                        ],
-                        'birthday'  => [
-                            'type' => 'Carbon',
-                        ],
-                        'id'        => [
-                            'type' => 'uuid',
-                        ],
-                        'qualified' => [
-                            'type' => 'bool',
-                        ],
-                        'username'  => [],
-                    ],
-                ],
-            ],
-            'transformers' => [
-                'array' => [
-                    'user' => [
-                        'class' => null,
-                        'properties' => [
-                            'birthday' => [
-                                'type' => 'ISO8601',
-                                'name' => 'birth_day',
-                            ],
-                            'id' => [
-                                'type' => 'string',
-                            ]
-                        ],
-                    ],
-                ]
-            ],
-        ];
     }
 
     private function expectedObjectContext(): UsageTypeContext

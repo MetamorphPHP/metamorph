@@ -9,7 +9,8 @@
     "nikic/php-parser": "^4.0@dev"
   },
   "require-dev": {
-    "codeception/codeception": "^2.3.8"
+    "codeception/codeception": "^2.3.8",
+    "ramsey/uuid": "^3.0@dev"
   },
   "minimum-stability": "dev",
   "autoload": {

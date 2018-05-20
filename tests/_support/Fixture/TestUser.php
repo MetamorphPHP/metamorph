@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Tests\Fixture;
 
+use Ramsey\Uuid\Uuid;
+
 class TestUser
 {
     public $birthday;
