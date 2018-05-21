@@ -19,9 +19,6 @@ class TransformerType
 
     public function setFrom(string $from): TransformerType
     {
-        if ('object' === $from) {
-            $from = 'objects';
-        }
         $this->from = $from;
 
         return $this;
@@ -34,9 +31,6 @@ class TransformerType
 
     public function setTo(string $to): TransformerType
     {
-        if ('object' === $to) {
-            $to = 'objects';
-        }
         $this->to = $to;
 
         return $this;

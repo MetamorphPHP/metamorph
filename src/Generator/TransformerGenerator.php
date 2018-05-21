@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Metamorph\Generator;
 
-use Metamorph\Context\TransformerGeneratorContext;
 use Metamorph\Context\TransformerType;
 use Metamorph\Factory\TransformerGeneratorContextFactory;
+use Metamorph\Interactor\GenerateClass;
 
 class TransformerGenerator
 {
@@ -30,7 +30,6 @@ class TransformerGenerator
     {
         $context = $this->contextFactory->create($transformerType);
         $class = (new GenerateClass)($context);
-
     }
 
     private function getConfig(TransformerType $transformerType)

@@ -13,6 +13,8 @@ class UsageTypeContext
     private $name;
     /** @var string */
     private $namespace;
+    /** @var array */
+    private $objects;
     /** @var string */
     private $path;
     /** @var array */
@@ -76,6 +78,18 @@ class UsageTypeContext
     public function setNamespace(string $namespace): UsageTypeContext
     {
         $this->namespace = $namespace;
+
+        return $this;
+    }
+
+    public function getObjects(): array
+    {
+        return $this->objects;
+    }
+
+    public function setObjects(array $objects): UsageTypeContext
+    {
+        $this->objects = $objects;
 
         return $this;
     }

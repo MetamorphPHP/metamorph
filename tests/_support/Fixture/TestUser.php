@@ -9,6 +9,8 @@ class TestUser
 {
     public $birthday;
 
+    /** @var TestAddress */
+    private $address;
     /** @var bool */
     private $allowed;
     /** @var Uuid */
@@ -17,6 +19,18 @@ class TestUser
     private $qualified;
     /** @var string */
     private $username;
+
+    public function getAddress(): TestAddress
+    {
+        return $this->address;
+    }
+
+    public function setAddress(TestAddress $address): TestUser
+    {
+        $this->address = $address;
+
+        return $this;
+    }
 
     public function isAllowed(): bool
     {

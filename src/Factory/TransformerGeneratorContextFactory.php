@@ -23,26 +23,12 @@ class TransformerGeneratorContextFactory
 
     public function create(TransformerType $transformerType): TransformerGeneratorContext
     {
-        $toContext = $this->getUsageFor($transformerType->getTo());
-        $fromContext = $this->getUsageFor($transformerType->getFrom());
+        $fromContext = $this->usageContextFactory->createFrom($transformerType);
+        $toContext = $this->usageContextFactory->createTo($transformerType);
 
         return (new TransformerGeneratorContext())
+            ->setConfig($this->config)
             ->setFrom($fromContext)
             ->setTo($toContext);
-    }
-
-    private function buildUsage(string $usage)
-    {
-
-        $this->usages[$usage] = $usage;
-    }
-
-    private function getUsageFor(string $usage): UsageTypeContext
-    {
-        if (!isset($this->usages[$usage])) {
-            $this->buildUsage($usage);
-        }
-
-        return $this->usages[$usage];
     }
 }

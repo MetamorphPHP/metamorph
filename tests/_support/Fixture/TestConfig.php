@@ -8,62 +8,80 @@ class TestConfig
     public static function get()
     {
         return [
-            'objects' => [
-                'path'       => __DIR__.'/../../_support/Fixture/Transformer',
-                'namespace'  => 'Tests\Fixture\Transformer',
-                'user' => [
-                    'class'      => TestUser::class,
-                    'properties' => [
-                        'address' => [
-                            'object' => 'address',
-                        ],
-                        'allowed'   => [
-                            'type' => 'bool',
-                        ],
-                        'birthday'  => [
-                            'type' => 'Carbon',
-                        ],
-                        'id'        => [
-                            'type' => 'uuid',
-                        ],
-                        'qualified' => [
-                            'type' => 'bool',
-                        ],
-                        'username'  => [],
+            'genData' => [
+                'config'       => [
+                    'entities' => [
+                        'path'      => __DIR__.'/../../_support/Fixture',
+                        'namespace' => 'Tests\Fixture',
                     ],
-                ],
-                'address' => [
-                    'path'       => __DIR__.'/../../_support/Fixture/Transformer/User',
-                    'namespace'  => 'Tests\Fixture\Transformer\User',
-                    'class' => TestAddress::class,
-                    'properties' => [
-                        'city' => [
-                            'type' => 'string',
-                        ],
-                        'state' => [
-                            'type' => 'string',
+                    'transformers' => [
+                        'path'      => __DIR__.'/../../_support/Fixture/Transformer',
+                        'namespace' => 'Tests\Fixture\Transformer',
+                        'address'    => [
+                            'path'      => __DIR__.'/../../_support/Fixture/Transformer/User',
+                            'namespace' => 'Tests\Fixture\Transformer\User',
                         ],
                     ],
                 ],
-            ],
-            'transformers' => [
-                'array' => [
-                    'user' => [
-                        'class' => null,
+                'objects'      => [
+                    'user'    => [
+                        'class'      => 'TestUser',
                         'properties' => [
-                            'birthday' => [
-                                'type' => 'ISO8601',
-                                'name' => 'birth_day',
+                            'address'   => [
+                                'object' => 'address',
                             ],
-                            'id' => [
-                                'type' => 'string',
-                            ]
+                            'allowed'   => [
+                                'type' => 'bool',
+                            ],
+                            'birthday'  => [
+                                'type' => 'Carbon\Carbon',
+                            ],
+                            'id'        => [
+                                'type' => 'Ramsey\Uuid',
+                            ],
+                            'qualified' => [
+                                'type' => 'bool',
+                            ],
+                            'username'  => [],
                         ],
                     ],
                     'address' => [
-                        'class' => null,
-                    ]
-                ]
+                        'class'      => 'TestAddress',
+                        'properties' => [
+                            'city'  => [
+                                'type' => 'string',
+                            ],
+                            'state' => [
+                                'type' => 'string',
+                            ],
+                            'zip' => [
+                                'type' => 'string',
+                            ],
+                        ],
+                    ],
+                ],
+                'transformers' => [
+                    'array' => [
+                        'user'    => [
+                            'class'      => null,
+                            'properties' => [
+                                'birthday' => [
+                                    'type' => 'ISO8601',
+                                    'name' => 'birth_day',
+                                ],
+                                'id'       => [
+                                    'type' => 'string',
+                                ],
+                            ],
+                        ],
+                        'address' => [
+                            'class' => null,
+                            'exclude' => [
+                                'zip',
+                            ]
+                        ],
+                    ],
+                ],
             ],
         ];
     }

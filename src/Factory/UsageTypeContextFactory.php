@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Metamorph\Factory;
 
 use Exception;
+use Metamorph\Context\TransformerType;
 use Metamorph\Context\UsageTypeContext;
 use Metamorph\Interactor\PascalCase;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -22,6 +23,8 @@ class UsageTypeContextFactory
     /** @var bool */
     private $isClass;
     /** @var array */
+    private $objects = [];
+    /** @var array */
     private $properties;
     /** @var array */
     private $propertyTypes;
@@ -31,10 +34,22 @@ class UsageTypeContextFactory
     private $usage;
     /** @var array */
     private $usageTypeConfig;
+    /** @var string */
+    private $variableName;
 
     public function __construct(array $config)
     {
         $this->config = $config;
+    }
+
+    public function createFrom(TransformerType $type)
+    {
+        return $this->create($type->getFrom(), $type->getType());
+    }
+
+    public function createTo(TransformerType $type)
+    {
+        return $this->create($type->getTo(), $type->getType());
     }
 
     public function create(string $usage, string $type): UsageTypeContext
@@ -52,6 +67,7 @@ class UsageTypeContextFactory
             ->setGetters($getters)
             ->setName($type)
             ->setNamespace($namespace)
+            ->setObjects($this->objects)
             ->setPath($path)
             ->setProperties($properties)
             ->setSetters($setters)
@@ -100,22 +116,22 @@ class UsageTypeContextFactory
 
     private function generateGetter(string $name)
     {
-        if (! $this->isClass) {
-            return new ArrayDimFetch(new Variable($this->type), new String_($name));
+        if (!$this->isClass) {
+            return new ArrayDimFetch(new Variable($this->variableName), new String_($name));
         }
 
-        $getter = 'get' . (new PascalCase)($name);
+        $getter = 'get'.(new PascalCase)($name);
         if (method_exists($this->class, $getter)) {
-            return new MethodCall(new Variable($this->type), new Identifier($getter));
+            return new MethodCall(new Variable($this->variableName), new Identifier($getter));
         }
 
-        $isser = 'is' . (new PascalCase)($name);
+        $isser = 'is'.(new PascalCase)($name);
         if (method_exists($this->class, $isser)) {
-            return new MethodCall(new Variable($this->type), new Identifier($isser));
+            return new MethodCall(new Variable($this->variableName), new Identifier($isser));
         }
 
         if (property_exists($this->class, $name)) {
-            return new PropertyFetch(new Variable($this->type), new Identifier($name));
+            return new PropertyFetch(new Variable($this->variableName), new Identifier($name));
         }
 
         throw new Exception("'$name' is not part of $this->class. Check the configuration or the class.");
@@ -123,17 +139,17 @@ class UsageTypeContextFactory
 
     private function generateSetter(string $name)
     {
-        if (! $this->isClass) {
-            return new ArrayDimFetch(new Variable($this->type), new String_($name));
+        if (!$this->isClass) {
+            return new ArrayDimFetch(new Variable($this->variableName), new String_($name));
         }
 
-        $setter = 'set' . (new PascalCase)($name);
+        $setter = 'set'.(new PascalCase)($name);
         if (method_exists($this->class, $setter)) {
-            return [new Variable($this->type), new Identifier($setter)];
+            return [new Variable($this->variableName), new Identifier($setter)];
         }
 
         if (property_exists($this->class, $name)) {
-            return new PropertyFetch(new Variable($this->type), new Identifier($name));
+            return new PropertyFetch(new Variable($this->variableName), new Identifier($name));
         }
 
         throw new Exception("'$name' is not part of $this->class. Check the configuration or the class.");
@@ -143,14 +159,8 @@ class UsageTypeContextFactory
     {
         $this->type = $type;
         $this->usage = $usage;
-        $baseConfig = $this->config['objects'][$type];
-        if ('object' === $usage || 'objects' === $usage) {
-            $usage = 'objects';
-            $this->usageTypeConfig = $baseConfig;
-        } else {
-            $this->usageTypeConfig = array_replace_recursive($baseConfig, $this->config['transformers'][$usage][$type]);
-        }
-
+        $this->variableName = $type.ucfirst($usage);
+        $this->usageTypeConfig = $this->config[$usage][$type];
         if (!$class = $this->usageTypeConfig['class']) {
             $this->isClass = false;
         } else {
@@ -161,24 +171,27 @@ class UsageTypeContextFactory
                 throw new Exception("$class doesn't exist");
             }
         }
-        $this->initProperties($usage, $type);
+        $this->initProperties();
     }
 
-    private function initProperties(string $usage, string $type)
+    private function initProperties()
     {
         $this->properties = [];
-        $propertyConfigs = $this->config['objects'][$type]['properties'];
-        foreach ($propertyConfigs as $propertyName => $propertyConfig) {
-            $this->properties[$propertyName] = $propertyName;
-            $type = $propertyConfig['type'] ?? 'string';
+        foreach ($this->usageTypeConfig['properties'] as $propertyName => $propertyConfig) {
+            $this->properties[$propertyName] = $propertyConfig['name'];
+            $type = $propertyConfig['type'] ?? ['object' => $propertyConfig['object']];
+
+            if (isset($propertyConfig['object'])) {
+                $this->addObject($propertyConfig['object']);
+            }
             $this->propertyTypes[$propertyName] = $type;
         }
-        if ('objects' !== $usage) {
-            foreach ($this->usageTypeConfig['properties'] as $identifier => $propertyConfig) {
-                if (isset($propertyConfig['name'])) {
-                    $this->properties[$identifier] = $propertyConfig['name'];
-                }
-            }
-        }
+    }
+
+    private function addObject(string $object)
+    {
+        $factory = new UsageTypeContextFactory($this->config);
+
+        $this->objects[$object] = $factory->create($this->usage, $object);
     }
 }

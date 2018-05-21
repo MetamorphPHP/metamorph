@@ -7,6 +7,7 @@ class TestAddress
 {
     private $city;
     private $state;
+    private $zip;
 
     public function getCity()
     {
@@ -28,6 +29,18 @@ class TestAddress
     public function setState($state)
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    public function getZip()
+    {
+        return $this->zip;
+    }
+
+    public function setZip($zip)
+    {
+        $this->zip = $zip;
 
         return $this;
     }
