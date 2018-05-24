@@ -11,6 +11,8 @@ class TransformerGeneratorContext
     private $from;
     /** @var string */
     private $object;
+    /** @var array */
+    private $setValues;
     /** @var UsageTypeContext */
     private $to;
 
@@ -48,6 +50,18 @@ class TransformerGeneratorContext
         $this->object = $object;
 
         return $this;
+    }
+
+    public function addSetValue(string $property, $node)
+    {
+        $this->setValues[$property] = $node;
+
+        return $this;
+    }
+
+    public function getSetValues(): array
+    {
+        return $this->setValues;
     }
 
     public function getTo(): UsageTypeContext

@@ -71,6 +71,14 @@ class UsageTypeContextFactoryCest
             'qualified' => [new Variable('userObject'), new Identifier('setQualified')],
             'username'  => [new Variable('userObject'), new Identifier('setUsername')],
         ];
+        $types = [
+            'address'   => ['object' => 'address'],
+            'allowed'   => ['scalar' => 'bool'],
+            'birthday'  => ['class' => 'Carbon\Carbon'],
+            'id'        => ['class' => 'Ramsey\Uuid'],
+            'qualified' => ['scalar' => 'bool'],
+            'username'  => ['scalar' => 'string'],
+        ];
 
         return (new UsageTypeContext())
             ->setClass(TestUser::class)
@@ -80,6 +88,7 @@ class UsageTypeContextFactoryCest
             ->setObjects($this->expectedObjectObjects())
             ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer'))
             ->setProperties($properties)
+            ->setTypes($types)
             ->setSetters($setters)
             ->setUsage('object');
     }
@@ -97,10 +106,16 @@ class UsageTypeContextFactoryCest
             'state'   => 'state',
             'zip'  => 'zip',
         ];
+
         $setters = [
             'city'   => [new Variable('addressObject'), new Identifier('setCity')],
             'state'   => [new Variable('addressObject'), new Identifier('setState')],
             'zip'        => [new Variable('addressObject'), new Identifier('setZip')],
+        ];
+        $types = [
+            'city' => ['scalar' => 'string'],
+            'state' => ['scalar' => 'string'],
+            'zip' => ['scalar' => 'string'],
         ];
 
         return [ 'address' => (new UsageTypeContext())
@@ -112,6 +127,7 @@ class UsageTypeContextFactoryCest
             ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer/User'))
             ->setProperties($properties)
             ->setSetters($setters)
+            ->setTypes($types)
             ->setUsage('object')];
     }
 
@@ -141,6 +157,14 @@ class UsageTypeContextFactoryCest
             'qualified' => new ArrayDimFetch(new Variable('userArray'), new String_('qualified')),
             'username'  => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
         ];
+        $types = [
+            'address'   => ['object' => 'address'],
+            'allowed'   => ['scalar' => 'bool'],
+            'birthday'  => ['format' => 'ISO8601'],
+            'id'        => ['scalar' => 'string'],
+            'qualified' => ['scalar' => 'bool'],
+            'username'  => ['scalar' => 'string'],
+        ];
 
         return (new UsageTypeContext())
             ->setClass(null)
@@ -151,6 +175,7 @@ class UsageTypeContextFactoryCest
             ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer'))
             ->setProperties($properties)
             ->setSetters($setters)
+            ->setTypes($types)
             ->setUsage('array');
     }
 
@@ -168,6 +193,10 @@ class UsageTypeContextFactoryCest
             'city'   => new ArrayDimFetch(new Variable('addressArray'), new String_('city')),
             'state'   => new ArrayDimFetch(new Variable('addressArray'), new String_('state')),
         ];
+        $types = [
+            'city' => ['scalar' => 'string'],
+            'state' => ['scalar' => 'string'],
+        ];
 
         return [
             'address' => (new UsageTypeContext())
@@ -179,6 +208,7 @@ class UsageTypeContextFactoryCest
                 ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer/User'))
                 ->setProperties($properties)
                 ->setSetters($setters)
+                ->setTypes($types)
                 ->setUsage('array'),
         ];
     }

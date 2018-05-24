@@ -8,54 +8,75 @@ class TestConfigNormalized
     public static function get()
     {
         return [
+            '_transformations' => [
+                __DIR__.'/Transformation',
+            ],
             'object' => [
                 'user'    => [
-                    'class'      => TestUser::class,
+                    'class'      => '\Tests\Fixture\TestUser',
                     'namespace'  => 'Tests\Fixture\Transformer',
                     'path'       => __DIR__.'/Transformer',
                     'properties' => [
                         'address'   => [
-                            'name'   => 'address',
-                            'object' => 'address',
+                            'name' => 'address',
+                            'type' => [
+                                'object' => 'address',
+                            ],
                         ],
                         'allowed'   => [
                             'name' => 'allowed',
-                            'type' => 'bool',
+                            'type' => [
+                                'scalar' => 'bool',
+                            ],
                         ],
                         'birthday'  => [
                             'name' => 'birthday',
-                            'type' => 'Carbon\Carbon',
+                            'type' => [
+                                'class' => 'Carbon\Carbon',
+                            ],
                         ],
                         'id'        => [
                             'name' => 'id',
-                            'type' => 'Ramsey\Uuid',
+                            'type' => [
+                                'class' => 'Ramsey\Uuid',
+                            ],
                         ],
                         'qualified' => [
                             'name' => 'qualified',
-                            'type' => 'bool',
+                            'type' => [
+                                'scalar' => 'bool',
+                            ],
                         ],
                         'username'  => [
                             'name' => 'username',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                     ],
                 ],
                 'address' => [
-                    'class'      => TestAddress::class,
+                    'class'      => '\Tests\Fixture\TestAddress',
                     'path'       => __DIR__.'/Transformer/User',
                     'namespace'  => 'Tests\Fixture\Transformer\User',
                     'properties' => [
                         'city'  => [
                             'name' => 'city',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                         'state' => [
                             'name' => 'state',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
-                        'zip' => [
+                        'zip'   => [
                             'name' => 'zip',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                     ],
                 ],
@@ -67,28 +88,41 @@ class TestConfigNormalized
                     'path'       => __DIR__.'/Transformer',
                     'properties' => [
                         'address'   => [
-                            'name'   => 'address',
-                            'object' => 'address',
+                            'name' => 'address',
+                            'type' => [
+                                'object' => 'address',
+                            ],
                         ],
                         'allowed'   => [
                             'name' => 'allowed',
-                            'type' => 'bool',
+                            'type' => [
+                                'scalar' => 'bool',
+                            ],
                         ],
                         'birthday'  => [
                             'name' => 'birth_day',
-                            'type' => 'ISO8601',
+                            'type' => [
+                                '_from' => ['transformer' => 'inclusiveDateTime'],
+                                '_to' => ['format' => 'ISO8601'],
+                            ],
                         ],
                         'id'        => [
                             'name' => '_id',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                         'qualified' => [
                             'name' => 'qualified',
-                            'type' => 'bool',
+                            'type' => [
+                                'scalar' => 'bool',
+                            ],
                         ],
                         'username'  => [
                             'name' => 'username',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                     ],
                 ],
@@ -99,11 +133,15 @@ class TestConfigNormalized
                     'properties' => [
                         'city'  => [
                             'name' => 'city',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                         'state' => [
                             'name' => 'state',
-                            'type' => 'string',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
                         ],
                     ],
                 ],

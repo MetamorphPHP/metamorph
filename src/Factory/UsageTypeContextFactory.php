@@ -61,6 +61,7 @@ class UsageTypeContextFactory
         $path = $this->getPath();
         $properties = $this->getProperties();
         $setters = $this->getSetters();
+        $types = $this->getTypes();
 
         return (new UsageTypeContext())
             ->setClass($class)
@@ -71,6 +72,7 @@ class UsageTypeContextFactory
             ->setPath($path)
             ->setProperties($properties)
             ->setSetters($setters)
+            ->setTypes($types)
             ->setUsage($usage);
     }
 
@@ -112,6 +114,11 @@ class UsageTypeContextFactory
         }
 
         return $setters;
+    }
+
+    private function getTypes(): array
+    {
+        return $this->propertyTypes;
     }
 
     private function generateGetter(string $name)
@@ -179,10 +186,10 @@ class UsageTypeContextFactory
         $this->properties = [];
         foreach ($this->usageTypeConfig['properties'] as $propertyName => $propertyConfig) {
             $this->properties[$propertyName] = $propertyConfig['name'];
-            $type = $propertyConfig['type'] ?? ['object' => $propertyConfig['object']];
+            $type = $propertyConfig['type'];
 
-            if (isset($propertyConfig['object'])) {
-                $this->addObject($propertyConfig['object']);
+            if (isset($type['object'])) {
+                $this->addObject($type['object']);
             }
             $this->propertyTypes[$propertyName] = $type;
         }

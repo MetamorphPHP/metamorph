@@ -22,8 +22,8 @@ class GenerateClass
         $namespaceName = new Name($context->getFrom()->getNamespace());
         $namespace = new Namespace_($namespaceName, $statements);
 
-        $prettyPrinter = new Standard();
-        $results = $prettyPrinter->prettyPrint([$namespace]);
+        $prettyPrinter = new Standard(['shortArraySyntax' => true]);
+        $results = $prettyPrinter->prettyPrintFile([$namespace]);
 
         $a = 0;
     }
@@ -41,11 +41,10 @@ class GenerateClass
 
     private function getClassStatements(TransformerGeneratorContext $context): array
     {
-        $statements = [];
         $classProperties = (new GenerateProperties)($context);
-        array_merge($statements, $classProperties);
+        $classMethods = (new GetTransformMethods)($context);
 
-        return $statements;
+        return array_merge($classProperties, $classMethods);
     }
 
     private function getNamespaceStatements(TransformerGeneratorContext $context): array

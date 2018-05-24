@@ -21,6 +21,8 @@ class UsageTypeContext
     private $properties;
     /** @var array */
     private $setters;
+    /** @var array */
+    private $types;
     /** @var string */
     private $usage;
 
@@ -41,7 +43,12 @@ class UsageTypeContext
         return $this;
     }
 
-    public function getGetter(string $property): string
+    public function getExcludedPropertyName(): string
+    {
+        return 'excluded' . ucfirst($this->name) . 'Properties';
+    }
+    
+    public function getGetter(string $property)
     {
         return $this->getters[$property];
     }
@@ -130,6 +137,18 @@ class UsageTypeContext
         return $this;
     }
 
+    public function getTypes(): array
+    {
+        return $this->types;
+    }
+
+    public function setTypes(array $types): UsageTypeContext
+    {
+        $this->types = $types;
+
+        return $this;
+    }
+
     public function getUsage(): string
     {
         return $this->usage;
@@ -140,5 +159,10 @@ class UsageTypeContext
         $this->usage = $usage;
 
         return $this;
+    }
+
+    public function getVariableName(): string
+    {
+        return $this->name . ucfirst($this->usage);
     }
 }
