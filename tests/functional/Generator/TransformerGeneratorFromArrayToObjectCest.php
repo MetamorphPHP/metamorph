@@ -11,8 +11,6 @@ use Tests\Fixture\TestConfigNormalized;
 
 class TransformerGeneratorFromArrayToObjectCest
 {
-    private $unset = ['something'];
-
     public function __construct()
     {
     }
@@ -26,10 +24,12 @@ class TransformerGeneratorFromArrayToObjectCest
             ->setTo('object')
             ->setType('user');
 
-        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $ast = $parser->parse($this->expectedClass());
-
         $generator->generateType($transformerType);
+
+        $fileName = __DIR__ . '/../../_support/Fixture/Transformer/TestUserArrayToObjectTransformer.php';
+        $contents = file_get_contents($fileName);
+
+        $I->assertSame($this->expectedClass(), $contents);
     }
 
     private function expectedClass()
@@ -39,9 +39,9 @@ class TransformerGeneratorFromArrayToObjectCest
 
 namespace Tests\Fixture\Transformer;
 
-use Metamorph\Metamorph\AbstractResource;
+use Metamorph\Resource\AbstractResource;
 use Metamorph\TransformerInterface;
-class UserArrayToObjectTransformer implements TransformerInterface
+class TestUserArrayToObjectTransformer implements TransformerInterface
 {
     public function transform(AbstractResource $resource)
     {
@@ -70,8 +70,8 @@ class UserArrayToObjectTransformer implements TransformerInterface
                 $userObjectBirthdayCarbon = new \Carbon\Carbon($userArrayBirthday);
                 $userObjectBirthday = $userObjectBirthdayCarbon;
             }
-        } catch (\Exception $e) {
-            throw new \Metamorph\Exception\TTransformException('Failed to transform userArrayBirthday because Carbon.');
+        } catch (\Exception $userObjectBirthdayE) {
+            throw new \Metamorph\Exception\TransformException('Failed to transform userArrayBirthday because Carbon.');
         }
         $userArrayId = $userArray['_id'];
         $userObjectId = \Ramsey\Uuid\Uuid::fromString($userArrayId);

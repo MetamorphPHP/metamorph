@@ -25,18 +25,26 @@ class GenerateClass
         $prettyPrinter = new Standard(['shortArraySyntax' => true]);
         $results = $prettyPrinter->prettyPrintFile([$namespace]);
 
-        $a = 0;
+        $filePath = $context->getTo()->getPath() . '/' . $this->getClassNameString($context) . '.php';
+
+        file_put_contents($filePath, $results);
     }
 
     private function getClassName(TransformerGeneratorContext $context): Name
     {
-        $name = ucfirst($context->getFrom()->getName()).
+        return new Name($this->getClassNameString($context));
+    }
+
+    private function getClassNameString(TransformerGeneratorContext $context): string
+    {
+        $classNameParts = explode('\\', $context->getTo()->getClass());
+        $className = array_pop($classNameParts);
+
+        return $className.
             ucfirst($context->getFrom()->getUsage()).
             'To'.
             ucfirst($context->getTo()->getUsage()).
             'Transformer';
-
-        return new Name($name);
     }
 
     private function getClassStatements(TransformerGeneratorContext $context): array

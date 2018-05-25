@@ -32,8 +32,6 @@ class InclusiveDateTimeToCarbon
 
                 return $carbon;
             }
-
-            return null;
         } catch (Exception $e) {
             throw new TransformException('Failed to transform userArrayBirthday because Carbon.');
         }
