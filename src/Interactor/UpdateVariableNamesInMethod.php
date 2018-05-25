@@ -19,7 +19,7 @@ class UpdateVariableNamesInMethod
     /** @var string */
     private $fromVariableName;
     /** @var array */
-    private $fullyQualifiedNamedObjects;
+    private $fullyQualifiedParts;
     /** @var string */
     private $property;
     /** @var UsageTypeContext */
@@ -46,6 +46,8 @@ class UpdateVariableNamesInMethod
 
         $this->replacementVariableNames[$methodVariableName] = $this->fromVariableName;
 
+        $this->replaceInNode($method);
+
         $variable = new Variable($this->fromVariableName);
         $assign = new Assign($variable, $this->from->getGetter($this->property));
         $statements[] = new Expression($assign);
@@ -67,40 +69,36 @@ class UpdateVariableNamesInMethod
         }
     }
 
-    private function replaceInClass($parentNode)
+    private function replaceFullyQualified($parentNode)
     {
-        $subNodes = $parentNode->getSubNodeNames();
-
-        if (in_array('class', $subNodes)) {
-            $identifier = $parentNode->class->getLast();
-            $parentNode->class = $this->fullyQualifiedNamedObjects[$identifier];
+        if ('Name' === $parentNode->getType()) {
+            $identifier = $parentNode->getLast();
+            $parentNode->parts = $this->fullyQualifiedParts[$identifier];
         }
     }
 
-    private function replaceInName($parentNode)
+    private function replaceVariable($parentNode)
     {
         $subNodes = $parentNode->getSubNodeNames();
 
-        if (in_array('name', $subNodes)) {
             if ('Expr_Variable' === $parentNode->getType()) {
                 $variableName = $parentNode->name;
                 if (!isset($this->replacementVariableNames[$variableName])) {
                     $expandedVariableName = $this->toVariableName.ucfirst($variableName);
-                    $parentNode->name = $expandedVariableName;
+                    $this->replacementVariableNames[$variableName] = $expandedVariableName;
                 }
                 $parentNode->name = $this->replacementVariableNames[$variableName];
             }
-        }
     }
 
     private function replaceInNode($parentNode)
     {
-        $this->replaceInSingleChild($parentNode, ['cond', 'else', 'expr', 'finally', 'var']);
+        $this->replaceInSingleChild($parentNode, ['cond', 'class', 'else', 'expr', 'finally', 'var']);
         $this->replaceInChildren($parentNode, ['args', 'catches', 'elseifs', 'types']);
         $this->replaceInStmts($parentNode);
         $this->replaceInValue($parentNode);
-        $this->replaceInClass($parentNode);
-        $this->replaceInName($parentNode);
+        $this->replaceFullyQualified($parentNode);
+        $this->replaceVariable($parentNode);
     }
 
     private function replaceInSingleChild($parentNode, $properties)
@@ -154,7 +152,8 @@ class UpdateVariableNamesInMethod
                 foreach ($node->uses as $useNode) {
                     $name = $useNode->name;
                     $identifier = $useNode->getAlias()->name;
-                    $this->fullyQualifiedNamedObjects[$identifier] = new Name('\\'.$name->toString());
+                    $fullyQualifiedName = new Name('\\'. $name->toString());
+                    $this->fullyQualifiedParts[$identifier] = $fullyQualifiedName->parts;
                 }
             }
         }
