@@ -47,35 +47,34 @@ class UserArrayToObjectTransformer implements TransformerInterface
     {
         $userArray = $resource->getValue();
         $addressArray = $userArray['address'];
-        $addressObject = new \Tests\Functional\TestAddress();
+        $addressObject = new \Tests\Fixture\TestAddress();
         $addressObject->setCity($addressArray['city']);
         $addressObject->setState($addressArray['state']);
-        $userArrayId = $userArray['_id'];
-        $userObjectId = Uuid::uuid4($userArrayId);
+        $userObject = new \Tests\Fixture\TestUser();
         $userArrayBirthday = $userArray['birth_day'];
         if (empty($userArrayBirthday)) {
             $userObjectBirthday = null;
         }
         try {
-            if ($userArrayBirthday instanceof UTCDateTime) {
+            if ($userArrayBirthday instanceof \MongoDB\BSON\UTCDateTime) {
                 $userArrayBirthday = $userArrayBirthday->toDateTime();
             }
-            if ($userArrayBirthday instanceof Carbon) {
+            if ($userArrayBirthday instanceof \Carbon\Carbon) {
                 $userObjectBirthday = $userArrayBirthday;
             }
-            if ($userArrayBirthday instanceof DateTime) {
-                $userObjectBirthdayCarbon = new Carbon($userArrayBirthday);
+            if ($userArrayBirthday instanceof \DateTime) {
+                $userObjectBirthdayCarbon = new \Carbon\Carbon($userArrayBirthday);
                 $userObjectBirthday = $userObjectBirthdayCarbon;
             }
             if (is_string($userArrayBirthday)) {
-                $userObjectBirthdayCarbon = new Carbon($userArrayBirthday);
+                $userObjectBirthdayCarbon = new \Carbon\Carbon($userArrayBirthday);
                 $userObjectBirthday = $userObjectBirthdayCarbon;
             }
-            $userObjectBirthday = null;
-        } catch (Exception $e) {
-            throw new TransformException('Failed to transform userArrayBirthday because Carbon.');
+        } catch (\Exception $e) {
+            throw new \Metamorph\Exception\TTransformException('Failed to transform userArrayBirthday because Carbon.');
         }
-        $userObject = new \Tests\Functional\TestUser();
+        $userArrayId = $userArray['_id'];
+        $userObjectId = \Ramsey\Uuid\Uuid::fromString($userArrayId);
         $userObject->setAddress($addressObject);
         $userObject->setAllowed($userArray['allowed']);
         $userObject->birthday = $userObjectBirthday;
@@ -84,12 +83,10 @@ class UserArrayToObjectTransformer implements TransformerInterface
         $userObject->setUsername($userArray['username']);
         return $userObject;
     }
-    
     public function setExclusions(AbstractResource $resource)
     {
     }
 }
-
 CLASS;
     }
 }

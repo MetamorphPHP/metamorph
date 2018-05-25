@@ -79,16 +79,14 @@ class UpdateVariableNamesInMethod
 
     private function replaceVariable($parentNode)
     {
-        $subNodes = $parentNode->getSubNodeNames();
-
-            if ('Expr_Variable' === $parentNode->getType()) {
-                $variableName = $parentNode->name;
-                if (!isset($this->replacementVariableNames[$variableName])) {
-                    $expandedVariableName = $this->toVariableName.ucfirst($variableName);
-                    $this->replacementVariableNames[$variableName] = $expandedVariableName;
-                }
-                $parentNode->name = $this->replacementVariableNames[$variableName];
+        if ('Expr_Variable' === $parentNode->getType()) {
+            $variableName = $parentNode->name;
+            if (!isset($this->replacementVariableNames[$variableName])) {
+                $expandedVariableName = $this->toVariableName.ucfirst($variableName);
+                $this->replacementVariableNames[$variableName] = $expandedVariableName;
             }
+            $parentNode->name = $this->replacementVariableNames[$variableName];
+        }
     }
 
     private function replaceInNode($parentNode)
@@ -122,6 +120,7 @@ class UpdateVariableNamesInMethod
                 if ('Stmt_Return' === $node->getType()) {
                     $variable = new Variable($this->toVariableName);
                     $process = $node->expr;
+                    $this->replaceInNode($process);
                     $assign = new Assign($variable, $process);
                     $node = new Expression($assign);
                     $parentNode->stmts[$position] = $node;
@@ -152,7 +151,7 @@ class UpdateVariableNamesInMethod
                 foreach ($node->uses as $useNode) {
                     $name = $useNode->name;
                     $identifier = $useNode->getAlias()->name;
-                    $fullyQualifiedName = new Name('\\'. $name->toString());
+                    $fullyQualifiedName = new Name('\\'.$name->toString());
                     $this->fullyQualifiedParts[$identifier] = $fullyQualifiedName->parts;
                 }
             }
