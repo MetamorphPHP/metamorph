@@ -12,6 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 
 class GenerateTransformMethod
 {
@@ -41,10 +42,16 @@ class GenerateTransformMethod
         $statements[] = $this->getSourceValue($context);
 
         $statements = array_merge($statements, (new GetSetStatements)($context));
-//
-//        $statements[] = $this->getReturnStatement($context);
+        $statements[] = $this->getReturnStatement($context);
 
         return $statements;
+    }
+
+    private function getReturnStatement(TransformerGeneratorContext $context): Return_
+    {
+        $variable = new Variable($context->getTo()->getVariableName());
+
+        return new Return_($variable);
     }
 
     private function getSourceValue(TransformerGeneratorContext $context): Expression
