@@ -50,10 +50,31 @@ class UserArrayToObjectTransformer implements TransformerInterface
         $addressObject = new \Tests\Functional\TestAddress();
         $addressObject->setCity($addressArray['city']);
         $addressObject->setState($addressArray['state']);
-        
-        $userObjectId = Uuid::uuid4($userArray['_id']);
-        
-        $userObjectBirthday = $userArray->getBirthday()->toIso8601String();
+        $userArrayId = $userArray['_id'];
+        $userObjectId = Uuid::uuid4($userArrayId);
+        $userArrayBirthday = $userArray['birth_day'];
+        if (empty($userArrayBirthday)) {
+            $userObjectBirthday = null;
+        }
+        try {
+            if ($userArrayBirthday instanceof UTCDateTime) {
+                $userArrayBirthday = $userArrayBirthday->toDateTime();
+            }
+            if ($userArrayBirthday instanceof Carbon) {
+                $userObjectBirthday = $userArrayBirthday;
+            }
+            if ($userArrayBirthday instanceof DateTime) {
+                $userObjectBirthdayCarbon = new Carbon($userArrayBirthday);
+                $userObjectBirthday = $userObjectBirthdayCarbon;
+            }
+            if (is_string($userArrayBirthday)) {
+                $userObjectBirthdayCarbon = new Carbon($userArrayBirthday);
+                $userObjectBirthday = $userObjectBirthdayCarbon;
+            }
+            $userObjectBirthday = null;
+        } catch (Exception $e) {
+            throw new TransformException('Failed to transform userArrayBirthday because Carbon.');
+        }
         $userObject = new \Tests\Functional\TestUser();
         $userObject->setAddress($addressObject);
         $userObject->setAllowed($userArray['allowed']);

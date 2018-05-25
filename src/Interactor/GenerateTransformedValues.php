@@ -39,7 +39,7 @@ class GenerateTransformedValues
             $setVariableName = $to->getVariableName() . ucfirst($property);
             $context->addSetValue($property, new Variable($setVariableName));
 
-            $statements[] = (new GenerateTransformationCode)($context, $property);
+            $statements = array_merge($statements, (new GenerateTransformationCode)($context, $property));
         }
 
         return $statements;
