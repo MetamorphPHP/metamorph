@@ -6,7 +6,8 @@
   "license": "MIT",
   "require": {
     "php": ">=7.1",
-    "nikic/php-parser": "^4.0@dev"
+    "nikic/php-parser": "^4.0@dev",
+    "zendframework/zend-config-aggregator": "^1.1@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.3.8",
