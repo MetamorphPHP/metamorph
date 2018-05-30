@@ -11,17 +11,20 @@ class TestConfig
             'genData' => [
                 'config'       => [
                     'entities' => [
-                        'path'      => __DIR__.'/../../_support/Fixture',
-                        'namespace' => 'Tests\Fixture',
+                        '_path'      => __DIR__.'/../../_support/Fixture',
+                        '_namespace' => 'Tests\Fixture',
                     ],
                     'transformers' => [
-                        'path'      => __DIR__.'/../../_support/Fixture/Transformer',
-                        'namespace' => 'Tests\Fixture\Transformer',
+                        '_path'      => __DIR__.'/../../_support/Fixture/Transformer',
+                        '_namespace' => 'Tests\Fixture\Transformer',
                         'address'    => [
-                            'path'      => __DIR__.'/../../_support/Fixture/Transformer/User',
-                            'namespace' => 'Tests\Fixture\Transformer\User',
+                            '_path'      => __DIR__.'/../../_support/Fixture/Transformer/User',
+                            '_namespace' => 'Tests\Fixture\Transformer\User',
                         ],
                     ],
+                    'transformations' => [
+                        __DIR__.'/Transformation',
+                    ]
                 ],
                 'objects'      => [
                     'user'    => [
@@ -31,16 +34,16 @@ class TestConfig
                                 'object' => 'address',
                             ],
                             'allowed'   => [
-                                'type' => 'bool',
+                                'scalar' => 'bool',
                             ],
                             'birthday'  => [
-                                'type' => 'Carbon\Carbon',
+                                'class' => 'Carbon\Carbon',
                             ],
                             'id'        => [
-                                'type' => 'Ramsey\Uuid',
+                                'class' => 'Ramsey\Uuid',
                             ],
                             'qualified' => [
-                                'type' => 'bool',
+                                'scalar' => 'bool',
                             ],
                             'username'  => [],
                         ],
@@ -49,13 +52,13 @@ class TestConfig
                         'class'      => 'TestAddress',
                         'properties' => [
                             'city'  => [
-                                'type' => 'string',
+                                'scalar' => 'string',
                             ],
                             'state' => [
-                                'type' => 'string',
+                                'scalar' => 'string',
                             ],
                             'zip' => [
-                                'type' => 'string',
+                                'scalar' => 'string',
                             ],
                         ],
                     ],
@@ -66,11 +69,13 @@ class TestConfig
                             'class'      => null,
                             'properties' => [
                                 'birthday' => [
-                                    'type' => 'ISO8601',
+                                    '_from' => ['format' => 'inclusiveDateTime'],
+                                    '_to' => ['format' => 'ISO8601'],
                                     'name' => 'birth_day',
                                 ],
                                 'id'       => [
-                                    'type' => 'string',
+                                    'name' => '_id',
+                                    'scalar' => 'string',
                                 ],
                             ],
                         ],

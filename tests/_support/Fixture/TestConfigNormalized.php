@@ -102,7 +102,7 @@ class TestConfigNormalized
                         'birthday'  => [
                             'name' => 'birth_day',
                             'type' => [
-                                '_from' => ['transformer' => 'inclusiveDateTime'],
+                                '_from' => ['format' => 'inclusiveDateTime'],
                                 '_to' => ['format' => 'ISO8601'],
                             ],
                         ],
