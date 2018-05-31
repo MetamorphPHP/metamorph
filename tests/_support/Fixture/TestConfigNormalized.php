@@ -10,10 +10,14 @@ class TestConfigNormalized
         return [
             '_usage' => [
                 'object' => [
-                    'array',
+                    'array' => [
+                        'user',
+                    ],
                 ],
                 'array' => [
-                    'object'
+                    'object' => [
+                        'user',
+                    ],
                 ],
             ],
             '_transformations' => [

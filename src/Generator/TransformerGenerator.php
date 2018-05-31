@@ -42,24 +42,31 @@ class TransformerGenerator
      */
     private function getTransformerTypes(): array
     {
-        $types = [];
+        $transformerTypes = [];
         $usages = $this->config['_usage'];
-        foreach ($usages as $type => $transformations) {
-            foreach ($transformations as $from => $to) {
-                if (is_array($to)) {
-                    foreach ($to as $individualTo) {
-                        $types[] = (new TransformerType())
-                            ->setFrom($from)
-                            ->setTo($individualTo)
-                            ->setType($type);
-                    }
-                } else {
-                    $types[] = (new TransformerType())
-                        ->setType($type)
-                        ->setFrom($from)
-                        ->setTo($to);
-                }
+        foreach ($usages as $from => $to) {
+            foreach ($to as $toName => $types) {
+                $transformerTypes = array_merge($transformerTypes, $this->getTypesFromConfig($from, $toName, $types));
             }
         }
+
+        return $transformerTypes;
+    }
+
+    private function getTypesFromConfig(string $from, string $to, $types)
+    {
+        $transformerTypes = [];
+
+        if (is_array($types)) {
+            foreach ($types as $type) {
+                $transformerTypes[] = (new TransformerType())
+                    ->setFrom($from)
+                    ->setTo($to)
+                    ->setType($type);
+
+            }
+        }
+
+        return $transformerTypes;
     }
 }

@@ -27,10 +27,14 @@ class TestConfig
                     ],
                     'usage' => [
                         'object' => [
-                            'array',
+                            'array' => [
+                                'user',
+                            ],
                         ],
                         'array' => [
-                            'object'
+                            'object' => [
+                                'user',
+                            ],
                         ],
                     ],
                 ],
