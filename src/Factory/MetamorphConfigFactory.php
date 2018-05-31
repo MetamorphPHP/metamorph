@@ -10,6 +10,7 @@ class MetamorphConfigFactory
     private $objects;
     private $paths;
     private $transformations;
+    private $usages;
 
     public function __invoke(array $config): array
     {
@@ -19,6 +20,7 @@ class MetamorphConfigFactory
 
         $normalized = [];
         $normalized['_transformations'] = $this->transformations;
+        $normalized['_usage'] = $this->usages;
         foreach ($genConfig['objects'] as $objectName => $objectProperties) {
             $objectConfig = [
                 'class'      => $this->entityClasses[$objectName],
@@ -76,6 +78,7 @@ class MetamorphConfigFactory
     {
         $this->objects = array_keys($config['objects']);
         $this->transformations = $config['config']['transformations'] ?? [];
+        $this->usages = $config['config']['usage'] ?? [];
 
         $this->configureEntities($config);
         $this->configureTransformers($config);

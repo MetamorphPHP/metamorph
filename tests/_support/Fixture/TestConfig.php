@@ -24,7 +24,15 @@ class TestConfig
                     ],
                     'transformations' => [
                         __DIR__.'/Transformation',
-                    ]
+                    ],
+                    'usage' => [
+                        'object' => [
+                            'array',
+                        ],
+                        'array' => [
+                            'object'
+                        ],
+                    ],
                 ],
                 'objects'      => [
                     'user'    => [

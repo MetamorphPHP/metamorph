@@ -8,6 +8,14 @@ class TestConfigNormalized
     public static function get()
     {
         return [
+            '_usage' => [
+                'object' => [
+                    'array',
+                ],
+                'array' => [
+                    'object'
+                ],
+            ],
             '_transformations' => [
                 __DIR__.'/Transformation',
             ],

@@ -43,7 +43,7 @@ class TransformerGenerator
     private function getTransformerTypes(): array
     {
         $types = [];
-        $usages = $this->config['transformers']['_usage'];
+        $usages = $this->config['_usage'];
         foreach ($usages as $type => $transformations) {
             foreach ($transformations as $from => $to) {
                 if (is_array($to)) {
