@@ -189,16 +189,16 @@ class UsageTypeContextFactory
             $type = $propertyConfig['type'];
 
             if (isset($type['object'])) {
-                $this->addObject($type['object']);
+                $this->addObject($propertyName, $type['object']);
             }
             $this->propertyTypes[$propertyName] = $type;
         }
     }
 
-    private function addObject(string $object)
+    private function addObject(string $propertyName, string $object)
     {
         $factory = new UsageTypeContextFactory($this->config);
 
-        $this->objects[$object] = $factory->create($this->usage, $object);
+        $this->objects[$propertyName] = $factory->create($this->usage, $object);
     }
 }
