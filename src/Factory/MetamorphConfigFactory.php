@@ -131,7 +131,8 @@ class MetamorphConfigFactory
         }
 
         return [
-            'name' => $value['name'] ?? $identifier,
+            'isCollection' => $values['isCollection'] ?? false,
+            'name' => $values['name'] ?? $identifier,
             'type' => $type ?? ['scalar' => 'string'],
         ];
     }

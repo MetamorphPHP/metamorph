@@ -30,36 +30,49 @@ class TestConfigNormalized
                     'path'       => __DIR__.'/Transformer',
                     'properties' => [
                         'address'   => [
+                            'isCollection' => false,
                             'name' => 'address',
                             'type' => [
                                 'object' => 'address',
                             ],
                         ],
                         'allowed'   => [
+                            'isCollection' => false,
                             'name' => 'allowed',
                             'type' => [
                                 'scalar' => 'bool',
                             ],
                         ],
                         'birthday'  => [
+                            'isCollection' => false,
                             'name' => 'birthday',
                             'type' => [
                                 'class' => 'Carbon\Carbon',
                             ],
                         ],
+                        'email'   => [
+                            'isCollection' => true,
+                            'name' => 'email',
+                            'type' => [
+                                'object' => 'email',
+                            ],
+                        ],
                         'id'        => [
+                            'isCollection' => false,
                             'name' => 'id',
                             'type' => [
                                 'class' => 'Ramsey\Uuid',
                             ],
                         ],
                         'qualified' => [
+                            'isCollection' => false,
                             'name' => 'qualified',
                             'type' => [
                                 'scalar' => 'bool',
                             ],
                         ],
                         'username'  => [
+                            'isCollection' => false,
                             'name' => 'username',
                             'type' => [
                                 'scalar' => 'string',
@@ -73,19 +86,43 @@ class TestConfigNormalized
                     'namespace'  => 'Tests\Fixture\Transformer\User',
                     'properties' => [
                         'city'  => [
+                            'isCollection' => false,
                             'name' => 'city',
                             'type' => [
                                 'scalar' => 'string',
                             ],
                         ],
                         'state' => [
+                            'isCollection' => false,
                             'name' => 'state',
                             'type' => [
                                 'scalar' => 'string',
                             ],
                         ],
                         'zip'   => [
+                            'isCollection' => false,
                             'name' => 'zip',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
+                        ],
+                    ],
+                ],
+                'email' => [
+                    'class'      => '\Tests\Fixture\TestEmail',
+                    'path'       => __DIR__.'/Transformer',
+                    'namespace'  => 'Tests\Fixture\Transformer',
+                    'properties' => [
+                        'label' => [
+                            'isCollection' => false,
+                            'name' => 'label',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
+                        ],
+                        'value' => [
+                            'isCollection' => false,
+                            'name' => 'value',
                             'type' => [
                                 'scalar' => 'string',
                             ],
@@ -100,37 +137,50 @@ class TestConfigNormalized
                     'path'       => __DIR__.'/Transformer',
                     'properties' => [
                         'address'   => [
+                            'isCollection' => false,
                             'name' => 'address',
                             'type' => [
                                 'object' => 'address',
                             ],
                         ],
                         'allowed'   => [
+                            'isCollection' => false,
                             'name' => 'allowed',
                             'type' => [
                                 'scalar' => 'bool',
                             ],
                         ],
                         'birthday'  => [
+                            'isCollection' => false,
                             'name' => 'birth_day',
                             'type' => [
                                 '_from' => ['format' => 'inclusiveDateTime'],
                                 '_to' => ['format' => 'ISO8601'],
                             ],
                         ],
+                        'email'   => [
+                            'isCollection' => true,
+                            'name' => 'email',
+                            'type' => [
+                                'object' => 'email',
+                            ],
+                        ],
                         'id'        => [
+                            'isCollection' => false,
                             'name' => '_id',
                             'type' => [
                                 'scalar' => 'string',
                             ],
                         ],
                         'qualified' => [
+                            'isCollection' => false,
                             'name' => 'qualified',
                             'type' => [
                                 'scalar' => 'bool',
                             ],
                         ],
                         'username'  => [
+                            'isCollection' => false,
                             'name' => 'username',
                             'type' => [
                                 'scalar' => 'string',
@@ -144,13 +194,36 @@ class TestConfigNormalized
                     'namespace'  => 'Tests\Fixture\Transformer\User',
                     'properties' => [
                         'city'  => [
+                            'isCollection' => false,
                             'name' => 'city',
                             'type' => [
                                 'scalar' => 'string',
                             ],
                         ],
                         'state' => [
+                            'isCollection' => false,
                             'name' => 'state',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
+                        ],
+                    ],
+                ],
+                'email' => [
+                    'class'      => null,
+                    'path'       => __DIR__.'/Transformer',
+                    'namespace'  => 'Tests\Fixture\Transformer',
+                    'properties' => [
+                        'label' => [
+                            'isCollection' => false,
+                            'name' => 'label',
+                            'type' => [
+                                'scalar' => 'string',
+                            ],
+                        ],
+                        'value' => [
+                            'isCollection' => false,
+                            'name' => 'value',
                             'type' => [
                                 'scalar' => 'string',
                             ],

@@ -192,6 +192,7 @@ class UsageTypeContextFactory
                 $this->addObject($propertyName, $type['object']);
             }
             $this->propertyTypes[$propertyName] = $type;
+            $this->propertyTypes[$propertyName]['isCollection'] = $propertyConfig['isCollection'];
         }
     }
 

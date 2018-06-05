@@ -51,6 +51,10 @@ class TestConfig
                             'birthday'  => [
                                 'class' => 'Carbon\Carbon',
                             ],
+                            'email' => [
+                                'isCollection' => true,
+                                'object' => 'email',
+                            ],
                             'id'        => [
                                 'class' => 'Ramsey\Uuid',
                             ],
@@ -71,6 +75,17 @@ class TestConfig
                             ],
                             'zip' => [
                                 'scalar' => 'string',
+                            ],
+                        ],
+                    ],
+                    'email' => [
+                        'class'      => 'TestEmail',
+                        'properties' => [
+                            'label'  => [
+                                'type' => 'string',
+                            ],
+                            'value'  => [
+                                'type' => 'string',
                             ],
                         ],
                     ],
@@ -95,7 +110,10 @@ class TestConfig
                             'class' => null,
                             'exclude' => [
                                 'zip',
-                            ]
+                            ],
+                        ],
+                        'email' => [
+                            'class' => null,
                         ],
                     ],
                 ],
