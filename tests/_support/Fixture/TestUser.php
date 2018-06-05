@@ -13,6 +13,10 @@ class TestUser
     private $address;
     /** @var bool */
     private $allowed;
+    /** @var TestEmail */
+    private $email;
+    /** @var int[] */
+    private $favoriteNumbers;
     /** @var Uuid */
     private $id;
     /** @var bool */
@@ -40,6 +44,30 @@ class TestUser
     public function setAllowed(bool $allowed): TestUser
     {
         $this->allowed = $allowed;
+
+        return $this;
+    }
+
+    public function getEmail(): TestEmail
+    {
+        return $this->email;
+    }
+
+    public function setEmail(TestEmail $email): TestUser
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFavoriteNumbers(): array
+    {
+        return $this->favoriteNumbers;
+    }
+
+    public function setFavoriteNumbers(array $favoriteNumbers): TestUser
+    {
+        $this->favoriteNumbers = $favoriteNumbers;
 
         return $this;
     }

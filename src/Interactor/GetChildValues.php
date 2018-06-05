@@ -38,7 +38,7 @@ class GetChildValues
 
     private function assignInitialFromArray(string $property, UsageTypeContext $parent, UsageTypeContext $child): Expression
     {
-        $fromVariable = new Variable($child->getVariableName());
+        $fromVariable = new Variable($parent->getVariableNameForProperty($property));
         $assign = new Assign($fromVariable, $parent->getGetter($property));
 
         return new Expression($assign);

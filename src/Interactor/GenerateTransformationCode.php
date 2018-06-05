@@ -95,6 +95,7 @@ class GenerateTransformationCode
 
             return ucfirst(array_pop($parts));
         }
+        unset($config['isCollection']);
 
         return ucfirst(array_pop($config));
     }

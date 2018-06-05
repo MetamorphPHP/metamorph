@@ -48,6 +48,7 @@ class GenerateSetToValues
     {
         $setters = $to->getSetters();
         $properties = $to->getProperties();
+        $types = $to->getTypes();
         $statements = [];
 
         foreach ($properties as $property => $name) {

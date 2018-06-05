@@ -25,9 +25,15 @@ class GenerateTransformedValues
             if (!isset($fromTypes[$property])) {
                 continue;
             }
+            $fromType = $fromTypes[$property];
+            if (true === $fromType['isCollection']) {
+                $a = 0;
+            }
             if ($fromTypes[$property] === $toTypes[$property]) {
                 if (isset($fromTypes[$property]['object'])) {
                     $variableName = $to->getObjects()[$property]->getVariableName();
+                    $variableName = $to->getVariableNameForProperty($property);
+
                     $context->addSetValue($property, new Variable($variableName));
                 } else {
                     $context->addSetValue($property, $getters[$property]);

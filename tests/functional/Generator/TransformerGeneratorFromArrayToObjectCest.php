@@ -50,6 +50,17 @@ class TestUserArrayToObjectTransformer implements TransformerInterface
         $addressObject = new \Tests\Fixture\TestAddress();
         $addressObject->setCity($addressArray['city']);
         $addressObject->setState($addressArray['state']);
+        
+        $emailObjectCollection = [];
+        $emailArrayCollection = $userArray['email'];
+        foreach ($emailArrayCollection as $emailArray) {
+            
+            $emailObject = new \Tests\Fixture\TestEmail();
+            $emailObject->setLabel($emailArray['label']);
+            $emailObject->setValue($emailArray['value']);
+            
+            $emailObjectCollection[] = $emailObject;
+        }
         $userObject = new \Tests\Fixture\TestUser();
         $userArrayBirthday = $userArray['birth_day'];
         if (empty($userArrayBirthday)) {
@@ -73,11 +84,18 @@ class TestUserArrayToObjectTransformer implements TransformerInterface
         } catch (\Exception $userObjectBirthdayE) {
             throw new \Metamorph\Exception\TransformException('Failed to transform userArrayBirthday because Carbon.');
         }
+        $userObjectFavoriteNumbers = [];
+        $userArrayFavoriteNumbers = $userArray['favoriteNumbers'];
+        foreach ($userArrayFavoriteNumbers as $something) {
+            $userObjectFavoriteNumbers[] = $userArrayFavoriteNumbers;
+        }
         $userArrayId = $userArray['_id'];
         $userObjectId = \Ramsey\Uuid\Uuid::fromString($userArrayId);
         $userObject->setAddress($addressObject);
         $userObject->setAllowed($userArray['allowed']);
         $userObject->birthday = $userObjectBirthday;
+        $userObject->setEmail($emailObjectCollection);
+        $userObject->setFavoriteNumbers($userObjectFavoriteNumbers);
         $userObject->setId($userObjectId);
         $userObject->setQualified($userArray['qualified']);
         $userObject->setUsername($userArray['username']);

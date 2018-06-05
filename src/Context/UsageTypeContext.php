@@ -165,4 +165,14 @@ class UsageTypeContext
     {
         return $this->name . ucfirst($this->usage);
     }
+
+    public function getVariableNameForProperty(string $property): string
+    {
+        $name = $this->properties[$property] . ucfirst($this->usage);
+        if (true === $this->types[$property]['isCollection']) {
+            $name .= 'Collection';
+        }
+
+        return $name;
+    }
 }
