@@ -25,12 +25,20 @@ class GetChildValues
                 ->setFrom($fromContext)
                 ->setTo($toContext);
 
+            $propertyStatements = [];
             if ($fromContext->isClass()) {
-                $statements[] = $this->assignInitialFromObject($property, $context->getFrom(), $fromContext);
+                $propertyStatements[] = $this->assignInitialFromObject($property, $context->getFrom(), $fromContext);
             } else {
-                $statements[] = $this->assignInitialFromArray($property, $context->getFrom(), $fromContext);
+                $propertyStatements[] = $this->assignInitialFromArray($property, $context->getFrom(), $fromContext);
             }
-            $statements = array_merge($statements, (new GetSetStatements)($childContext));
+            $propertyStatements = array_merge($propertyStatements, (new GetSetStatements)($childContext));
+
+            $propertyType = $context->getTo()->getTypes()[$property];
+            if (true === $propertyType['isCollection']) {
+                $propertyStatements = (new GenerateCollection)($property, $propertyStatements, $context->getFrom(), $context->getTo());
+            }
+
+            $statements = array_merge($statements, $propertyStatements);
         }
 
         return $statements;

@@ -50,15 +50,12 @@ class TestUserArrayToObjectTransformer implements TransformerInterface
         $addressObject = new \Tests\Fixture\TestAddress();
         $addressObject->setCity($addressArray['city']);
         $addressObject->setState($addressArray['state']);
-        
-        $emailObjectCollection = [];
         $emailArrayCollection = $userArray['email'];
+        $emailObjectCollection = [];
         foreach ($emailArrayCollection as $emailArray) {
-            
             $emailObject = new \Tests\Fixture\TestEmail();
             $emailObject->setLabel($emailArray['label']);
             $emailObject->setValue($emailArray['value']);
-            
             $emailObjectCollection[] = $emailObject;
         }
         $userObject = new \Tests\Fixture\TestUser();
