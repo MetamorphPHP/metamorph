@@ -73,9 +73,10 @@ class UserObjectToArrayTransformer implements TransformerInterface
             $emailArrayCollection[] = $emailArray;
         }
         $userArray = [];
+        $userObjectBirthday = $userObject->birthday;
+        $userArrayBirthday = $userObjectBirthday->toIso8601String();
         $userObjectId = $userObject->getId();
         $userArrayId = $userObjectId->toString();
-        $userArrayBirthday = $userObject->getBirthday()->toIso8601String();
         $userArray['address'] = $addressArray;
         $userArray['allowed'] = $userObject->isAllowed();
         $userArray['birth_day'] = $userArrayBirthday;
