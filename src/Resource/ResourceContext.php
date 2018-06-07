@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Metamorph\Resource;
 
 use Metamorph\Metamorph;
+use Metamorph\TransformerInterface;
 
 class ResourceContext
 {
@@ -62,5 +63,10 @@ class ResourceContext
         $this->to = $to;
 
         return $this;
+    }
+
+    public function getTransformer(): TransformerInterface
+    {
+
     }
 }

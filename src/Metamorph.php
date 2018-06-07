@@ -8,6 +8,8 @@ use Metamorph\Resource\AbstractResource;
 
 class Metamorph
 {
+    private $config;
+
     public function __construct(array $config)
     {
         $this->config = $config;
