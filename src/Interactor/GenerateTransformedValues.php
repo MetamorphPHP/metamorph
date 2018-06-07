@@ -31,7 +31,6 @@ class GenerateTransformedValues
             }
             if ($fromTypes[$property] === $toTypes[$property]) {
                 if (isset($fromTypes[$property]['object'])) {
-                    $variableName = $to->getObjects()[$property]->getVariableName();
                     $variableName = $to->getVariableNameForProperty($property);
 
                     $context->addSetValue($property, new Variable($variableName));

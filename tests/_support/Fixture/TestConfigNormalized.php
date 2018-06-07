@@ -57,6 +57,13 @@ class TestConfigNormalized
                                 'object' => 'email',
                             ],
                         ],
+                        'favoriteNumbers'   => [
+                            'isCollection' => true,
+                            'name' => 'favoriteNumbers',
+                            'type' => [
+                                'scalar' => 'int',
+                            ],
+                        ],
                         'id'        => [
                             'isCollection' => false,
                             'name' => 'id',
@@ -163,6 +170,13 @@ class TestConfigNormalized
                             'name' => 'email',
                             'type' => [
                                 'object' => 'email',
+                            ],
+                        ],
+                        'favoriteNumbers'   => [
+                            'isCollection' => true,
+                            'name' => 'favoriteNumbers',
+                            'type' => [
+                                'scalar' => 'string',
                             ],
                         ],
                         'id'        => [
