@@ -37,10 +37,7 @@ class GenerateClass
 
     private function getClassNameString(TransformerGeneratorContext $context): string
     {
-        $classNameParts = explode('\\', $context->getTo()->getClass());
-        $className = array_pop($classNameParts);
-
-        return $className.
+        return ucfirst($context->getTo()->getName()).
             ucfirst($context->getFrom()->getUsage()).
             'To'.
             ucfirst($context->getTo()->getUsage()).

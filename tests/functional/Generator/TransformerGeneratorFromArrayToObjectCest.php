@@ -24,9 +24,12 @@ class TransformerGeneratorFromArrayToObjectCest
             ->setTo('object')
             ->setType('user');
 
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $ast = $parser->parse($this->expectedClass());
+
         $generator->generateType($transformerType);
 
-        $fileName = __DIR__ . '/../../_support/Fixture/Transformer/TestUserArrayToObjectTransformer.php';
+        $fileName = __DIR__ . '/../../_support/Fixture/Transformer/UserArrayToObjectTransformer.php';
         $contents = file_get_contents($fileName);
 
         $I->assertSame($this->expectedClass(), $contents);
@@ -41,7 +44,7 @@ namespace Tests\Fixture\Transformer;
 
 use Metamorph\Resource\AbstractResource;
 use Metamorph\TransformerInterface;
-class TestUserArrayToObjectTransformer implements TransformerInterface
+class UserArrayToObjectTransformer implements TransformerInterface
 {
     public function transform(AbstractResource $resource)
     {

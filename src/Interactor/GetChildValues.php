@@ -26,11 +26,7 @@ class GetChildValues
                 ->setTo($toContext);
 
             $propertyStatements = [];
-            if ($fromContext->isClass()) {
-                $propertyStatements[] = $this->assignInitialFromObject($property, $context->getFrom(), $fromContext);
-            } else {
-                $propertyStatements[] = $this->assignInitialFromArray($property, $context->getFrom(), $fromContext);
-            }
+            $propertyStatements[] = $this->assignInitial($property, $context->getFrom(), $fromContext);
             $propertyStatements = array_merge($propertyStatements, (new GetSetStatements)($childContext));
 
             $propertyType = $context->getTo()->getTypes()[$property];
@@ -44,16 +40,11 @@ class GetChildValues
         return $statements;
     }
 
-    private function assignInitialFromArray(string $property, UsageTypeContext $parent, UsageTypeContext $child): Expression
+    private function assignInitial(string $property, UsageTypeContext $parent, UsageTypeContext $child): Expression
     {
         $fromVariable = new Variable($parent->getVariableNameForProperty($property));
         $assign = new Assign($fromVariable, $parent->getGetter($property));
 
         return new Expression($assign);
-    }
-
-    private function assignInitialFromObject(string $property, UsageTypeContext $parent, UsageTypeContext $child): Expression
-    {
-
     }
 }

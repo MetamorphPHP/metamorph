@@ -30,6 +30,11 @@ class TransformerGeneratorFromObjectToArrayCest
         $ast = $parser->parse($this->expectedClass());
 
         $generator->generateType($transformerType);
+
+        $fileName = __DIR__ . '/../../_support/Fixture/Transformer/UserObjectToArrayTransformer.php';
+        $contents = file_get_contents($fileName);
+
+        $I->assertSame($this->expectedClass(), $contents);
     }
 
     private function expectedClass()
@@ -39,14 +44,13 @@ class TransformerGeneratorFromObjectToArrayCest
 
 namespace Tests\Fixture\Transformer;
 
-use Metamorph\Metamorph\AbstractResource;
+use Metamorph\Resource\AbstractResource;
 use Metamorph\TransformerInterface;
-
 class UserObjectToArrayTransformer implements TransformerInterface
 {
     private $excludedAddressProperties = [];
+    private $excludedEmailProperties = [];
     private $excludedUserProperties = [];
-    
     public function transform(AbstractResource $resource)
     {
         $userObject = $resource->getValue();
@@ -57,28 +61,40 @@ class UserObjectToArrayTransformer implements TransformerInterface
         foreach ($this->excludedAddressProperties as $propertyToUnset) {
             unset($addressArray[$propertyToUnset]);
         }
-        $userArrayId = $userObject->getId()->toString();
-        $userArrayBirthday = $userObject->getBirthday()->toIso8601String();
+        $emailObjectCollection = $userObject->getEmail();
+        $emailArrayCollection = [];
+        foreach ($emailObjectCollection as $emailObject) {
+            $emailArray = [];
+            $emailArray['label'] = $emailObject->getLabel();
+            $emailArray['value'] = $emailObject->getValue();
+            foreach ($this->excludedEmailProperties as $propertyToUnset) {
+                unset($emailArray[$propertyToUnset]);
+            }
+            $emailArrayCollection[] = $emailArray;
+        }
         $userArray = [];
+        $userObjectId = $userObject->getId();
+        $userArrayId = $userObjectId->toString();
+        $userArrayBirthday = $userObject->getBirthday()->toIso8601String();
         $userArray['address'] = $addressArray;
         $userArray['allowed'] = $userObject->isAllowed();
         $userArray['birth_day'] = $userArrayBirthday;
+        $userArray['email'] = $emailArrayCollection;
         $userArray['_id'] = $userArrayId;
         $userArray['qualified'] = $userObject->getQualified();
         $userArray['username'] = $userObject->getUsername();
         foreach ($this->excludedUserProperties as $propertyToUnset) {
-            unset($user[$propertyToUnset]);
+            unset($userArray[$propertyToUnset]);
         }
         return $userArray;
     }
-    
     public function setExclusions(AbstractResource $resource)
     {
         $this->excludedAddressProperties = $resource->getExcludedProperties('address');
+        $this->excludedEmailProperties = $resource->getExcludedProperties('email');
         $this->excludedUserProperties = $resource->getExcludedProperties('user');
     }
 }
-
 CLASS;
     }
 }
