@@ -11,7 +11,13 @@
   },
   "require-dev": {
     "codeception/codeception": "^2.3.8",
+    "fzaninotto/faker": "^1.8@dev",
+    "nesbot/carbon": "dev-master",
     "ramsey/uuid": "^3.0@dev"
+  },
+  "suggest": {
+    "nesbot/carbon": "Date transformations",
+    "ramsy/uuid": "Uuid transformation"
   },
   "minimum-stability": "dev",
   "autoload": {

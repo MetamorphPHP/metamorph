@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Metamorph\Metamorph;
 
-use Metamorph\ResourceInterface;
+use Metamorph\Resource\AbstractResource;
 
 class Transform
 {
     private $resource;
 
-    public function __construct(ResourceInterface $resource)
+    public function __construct(AbstractResource $resource)
     {
         $this->resource = $resource;
     }

@@ -6,10 +6,12 @@ namespace Metamorph\Resource;
 abstract class AbstractResource
 {
     protected $context;
+    protected $data;
 
-    public function __construct()
+    public function __construct($data)
     {
         $this->context = new ResourceContext();
+        $this->data = $data;
     }
 
     public function getContext(): ResourceContext
@@ -24,5 +26,5 @@ abstract class AbstractResource
 
     abstract public function getValue();
 
-    abstract public function transform(): array;
+    abstract public function transform();
 }

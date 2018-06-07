@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Metamorph;
 
 use Metamorph\Metamorph\Transform;
+use Metamorph\Resource\AbstractResource;
 
 class Metamorph
 {
@@ -12,7 +13,7 @@ class Metamorph
         $this->config = $config;
     }
 
-    public function transform(ResourceInterface $resource): Transform
+    public function transform(AbstractResource $resource): Transform
     {
         $resource->getContext()->setMetamorph($this);
 

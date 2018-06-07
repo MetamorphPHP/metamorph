@@ -13,7 +13,7 @@ class TestUser
     private $address;
     /** @var bool */
     private $allowed;
-    /** @var TestEmail */
+    /** @var TestEmail[] */
     private $email;
     /** @var int[] */
     private $favoriteNumbers;
@@ -48,12 +48,12 @@ class TestUser
         return $this;
     }
 
-    public function getEmail(): TestEmail
+    public function getEmail(): array
     {
         return $this->email;
     }
 
-    public function setEmail(TestEmail $email): TestUser
+    public function setEmail(array $email): TestUser
     {
         $this->email = $email;
 

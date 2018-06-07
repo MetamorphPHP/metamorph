@@ -9,9 +9,8 @@ Usage
 
 $transformer = new Metamorph($config);
 
-$resource = new Collection($data);
+$resource = new Collection($incomingData);
 
-$data = $transformer->transform($resource)->from('object')->to('response);
-
+$transformedData = $transformer->transform($resource)->from('object')->to('response');
 
 ```
