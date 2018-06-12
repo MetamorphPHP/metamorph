@@ -98,7 +98,6 @@ class UserArrayToObjectTransformer implements TransformerInterface
         $userObject->setEmail($userEmailObjectCollection);
         $userObject->setFavoriteNumbers($userFavoriteNumbersObjectCollection);
         $userObject->setId($userIdObject);
-        $userObject->setQualified($userArray['qualified']);
         $userObject->setUsername($userArray['username']);
         return $userObject;
     }

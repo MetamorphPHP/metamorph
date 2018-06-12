@@ -52,7 +52,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => new MethodCall(new Variable('userObject'), new Identifier('isAllowed')),
             'birthday'  => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
             'id'        => new MethodCall(new Variable('userObject'), new Identifier('getId')),
-            'qualified' => new MethodCall(new Variable('userObject'), new Identifier('getQualified')),
             'username'  => new MethodCall(new Variable('userObject'), new Identifier('getUsername')),
         ];
         $properties = [
@@ -60,7 +59,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => 'allowed',
             'birthday'  => 'birthday',
             'id'        => 'id',
-            'qualified' => 'qualified',
             'username'  => 'username',
         ];
         $setters = [
@@ -68,7 +66,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => [new Variable('userObject'), new Identifier('setAllowed')],
             'birthday'  => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
             'id'        => [new Variable('userObject'), new Identifier('setId')],
-            'qualified' => [new Variable('userObject'), new Identifier('setQualified')],
             'username'  => [new Variable('userObject'), new Identifier('setUsername')],
         ];
         $types = [
@@ -76,7 +73,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => ['scalar' => 'bool'],
             'birthday'  => ['class' => 'Carbon\Carbon'],
             'id'        => ['class' => 'Ramsey\Uuid'],
-            'qualified' => ['scalar' => 'bool'],
             'username'  => ['scalar' => 'string'],
         ];
 
@@ -138,7 +134,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
             'birthday'  => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
             'id'        => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
-            'qualified' => new ArrayDimFetch(new Variable('userArray'), new String_('qualified')),
             'username'  => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
         ];
         $properties = [
@@ -146,7 +141,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => 'allowed',
             'birthday'  => 'birth_day',
             'id'        => '_id',
-            'qualified' => 'qualified',
             'username'  => 'username',
         ];
         $setters = [
@@ -154,7 +148,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
             'birthday'  => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
             'id'        => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
-            'qualified' => new ArrayDimFetch(new Variable('userArray'), new String_('qualified')),
             'username'  => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
         ];
         $types = [
@@ -162,7 +155,6 @@ class UsageTypeContextFactoryCest
             'allowed'   => ['scalar' => 'bool'],
             'birthday'  => ['format' => 'ISO8601'],
             'id'        => ['scalar' => 'string'],
-            'qualified' => ['scalar' => 'bool'],
             'username'  => ['scalar' => 'string'],
         ];
 

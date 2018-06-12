@@ -82,7 +82,6 @@ class UserObjectToArrayTransformer implements TransformerInterface
         $userArray['birth_day'] = $userArrayBirthday;
         $userArray['email'] = $emailArrayCollection;
         $userArray['_id'] = $userArrayId;
-        $userArray['qualified'] = $userObject->getQualified();
         $userArray['username'] = $userObject->getUsername();
         foreach ($this->excludedUserProperties as $propertyToUnset) {
             unset($userArray[$propertyToUnset]);

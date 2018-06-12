@@ -19,8 +19,6 @@ class TestUser
     private $favoriteNumbers;
     /** @var Uuid */
     private $id;
-    /** @var bool */
-    private $qualified;
     /** @var string */
     private $username;
 
@@ -80,18 +78,6 @@ class TestUser
     public function setId(Uuid $id): TestUser
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    public function getQualified(): bool
-    {
-        return $this->qualified;
-    }
-
-    public function setQualified(bool $qualified): TestUser
-    {
-        $this->qualified = $qualified;
 
         return $this;
     }

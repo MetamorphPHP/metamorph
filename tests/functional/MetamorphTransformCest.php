@@ -10,6 +10,7 @@ use Metamorph\Context\TransformerType;
 use Metamorph\Generator\TransformerGenerator;
 use Metamorph\Metamorph;
 use Metamorph\Resource\Collection;
+use Metamorph\Resource\Item;
 use Ramsey\Uuid\Uuid;
 use Tests\Fixture\TestAddress;
 use Tests\Fixture\TestConfigNormalized;
@@ -18,8 +19,8 @@ use Tests\Fixture\TestUser;
 
 class MetamorphTransformCest
 {
-    private $collectionData = [];
-    private $expectedData = [];
+    private $arrayData = [];
+    private $objectData = [];
 
     public function __construct()
     {
@@ -46,7 +47,7 @@ class MetamorphTransformCest
                 $numberCount++;
             } while ($numberCount < $totalNumbers);
 
-            $this->collectionData[] = [
+            $this->arrayData[] = [
                 'address' => [
                     'city' => $faker->city,
                     'state' => $faker->state,
@@ -61,7 +62,7 @@ class MetamorphTransformCest
             $x++;
         } while  ($x < 2);
 
-        foreach ($this->collectionData as $datum) {
+        foreach ($this->arrayData as $datum) {
             $address = (new TestAddress())
                 ->setCity($datum['address']['city'])
                 ->setState($datum['address']['state']);
@@ -85,7 +86,7 @@ class MetamorphTransformCest
                 ->setUsername($datum['username']);
             $user->birthday = new Carbon($datum['birth_day']);
 
-            $this->expectedData[] = $user;
+            $this->objectData[] = $user;
         }
 
         $generator = new TransformerGenerator(TestConfigNormalized::get());
@@ -96,6 +97,13 @@ class MetamorphTransformCest
             ->setType('user');
 
         $generator->generateType($transformerType);
+
+        $transformerType = (new TransformerType())
+            ->setFrom('object')
+            ->setTo('array')
+            ->setType('user');
+
+        $generator->generateType($transformerType);
     }
 
     public function testTransformCollection(FunctionalTester $I)
@@ -103,10 +111,46 @@ class MetamorphTransformCest
         $config = TestConfigNormalized::get();
         $transformer = new Metamorph($config);
 
-        $resource = new Collection($this->collectionData);
+        $resource = new Collection($this->arrayData);
 
         $transformedData = $transformer->transform($resource)->as('user')->from('array')->to('object');
 
-        $I->assertEquals($this->expectedData, $transformedData);
+        $I->assertEquals($this->objectData, $transformedData);
+    }
+
+    public function testTransformItem(FunctionalTester $I)
+    {
+        $config = TestConfigNormalized::get();
+        $transformer = new Metamorph($config);
+
+        $resource = new Item($this->arrayData[0]);
+
+        $transformedData = $transformer->transform($resource)->as('user')->from('array')->to('object');
+
+        $I->assertEquals($this->objectData[0], $transformedData);
+    }
+
+    public function testTransformCollectionReversal(FunctionalTester $I)
+    {
+        $config = TestConfigNormalized::get();
+        $transformer = new Metamorph($config);
+
+        $resource = new Collection($this->objectData);
+
+        $transformedData = $transformer->transform($resource)->as('user')->from('object')->to('array');
+
+        $I->assertEquals($this->arrayData, $transformedData);
+    }
+
+    public function testTransformItemReversal(FunctionalTester $I)
+    {
+        $config = TestConfigNormalized::get();
+        $transformer = new Metamorph($config);
+
+        $resource = new Item($this->objectData[0]);
+
+        $transformedData = $transformer->transform($resource)->as('user')->from('object')->to('array');
+
+        $I->assertEquals($this->arrayData[0], $transformedData);
     }
 }

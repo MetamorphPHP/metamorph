@@ -55,11 +55,12 @@ class TestConfig
                                 'isCollection' => true,
                                 'object' => 'email',
                             ],
+                            'favoriteNumbers' => [
+                                'isCollection' => true,
+                                'scalar' => 'int',
+                            ],
                             'id'        => [
                                 'class' => 'Ramsey\Uuid',
-                            ],
-                            'qualified' => [
-                                'scalar' => 'bool',
                             ],
                             'username'  => [],
                         ],
