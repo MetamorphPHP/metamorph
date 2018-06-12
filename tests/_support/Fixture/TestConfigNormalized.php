@@ -71,13 +71,6 @@ class TestConfigNormalized
                                 'class' => 'Ramsey\Uuid',
                             ],
                         ],
-                        'qualified' => [
-                            'isCollection' => false,
-                            'name' => 'qualified',
-                            'type' => [
-                                'scalar' => 'bool',
-                            ],
-                        ],
                         'username'  => [
                             'isCollection' => false,
                             'name' => 'username',
@@ -184,13 +177,6 @@ class TestConfigNormalized
                             'name' => '_id',
                             'type' => [
                                 'scalar' => 'string',
-                            ],
-                        ],
-                        'qualified' => [
-                            'isCollection' => false,
-                            'name' => 'qualified',
-                            'type' => [
-                                'scalar' => 'bool',
                             ],
                         ],
                         'username'  => [

@@ -76,14 +76,16 @@ class MetamorphTransformCest
             foreach ($datum['favoriteNumbers'] as $number) {
                 $favoriteNumbers[] = (int) $number;
             }
-            $this->expectedData[] = (new TestUser())
+            $user = (new TestUser())
                 ->setAddress($address)
                 ->setAllowed($datum['allowed'])
                 ->setEmail($emails)
                 ->setFavoriteNumbers($favoriteNumbers)
                 ->setId(Uuid::fromString($datum['_id']))
-                ->setUsername($datum['username'])
-                ->birthday = new Carbon($datum['birth_day']);
+                ->setUsername($datum['username']);
+            $user->birthday = new Carbon($datum['birth_day']);
+
+            $this->expectedData[] = $user;
         }
 
         $generator = new TransformerGenerator(TestConfigNormalized::get());
