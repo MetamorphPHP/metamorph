@@ -11,6 +11,6 @@ $transformer = new Metamorph($config);
 
 $resource = new Collection($incomingData);
 
-$transformedData = $transformer->transform($resource)->from('object')->to('response');
+$transformedData = $transformer->transform($resource)->as('user')->from('object')->to('response');
 
 ```

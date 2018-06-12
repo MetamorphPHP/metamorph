@@ -14,11 +14,11 @@ class Transform
         $this->resource = $resource;
     }
 
-    public function from(string $usage): From
+    public function as(string $type): AsType
     {
-        $this->resource->getContext()->setFrom($usage);
+        $this->resource->getContext()->setType($type);
 
-        return new From($this->resource);
+        return new AsType($this->resource);
     }
 
     public function properties(array $properties): Properties

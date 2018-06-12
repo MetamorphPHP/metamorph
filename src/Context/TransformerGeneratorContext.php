@@ -11,6 +11,8 @@ class TransformerGeneratorContext
     private $from;
     /** @var string */
     private $object;
+    /** @var TransformerGeneratorContext */
+    private $parentContext;
     /** @var array */
     private $setValues;
     /** @var UsageTypeContext */
@@ -48,6 +50,18 @@ class TransformerGeneratorContext
     public function setObject(string $object): TransformerGeneratorContext
     {
         $this->object = $object;
+
+        return $this;
+    }
+
+    public function getParentContext(): ?TransformerGeneratorContext
+    {
+        return $this->parentContext;
+    }
+
+    public function setParentContext(TransformerGeneratorContext $parentContext): TransformerGeneratorContext
+    {
+        $this->parentContext = $parentContext;
 
         return $this;
     }

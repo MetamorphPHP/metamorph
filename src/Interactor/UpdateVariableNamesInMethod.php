@@ -34,8 +34,8 @@ class UpdateVariableNamesInMethod
         $this->property = $property;
         $this->from = $context->getFrom();
         $this->to = $context->getTo();
-        $this->fromVariableName = $this->from->getVariableName().ucfirst($this->property);
-        $this->toVariableName = $this->to->getVariableName().ucfirst($this->property);
+        $this->fromVariableName = $this->from->getVariableNameForProperty($property);
+        $this->toVariableName = $this->to->getVariableNameForProperty($property);
     }
 
     public function update(Namespace_ $namespace, ClassMethod $method)

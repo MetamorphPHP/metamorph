@@ -5,7 +5,7 @@ namespace Metamorph\Metamorph;
 
 use Metamorph\Resource\AbstractResource;
 
-class Properties
+class AsType
 {
     private $resource;
 
@@ -14,10 +14,10 @@ class Properties
         $this->resource = $resource;
     }
 
-    public function as(string $type): AsType
+    public function from(string $usage): From
     {
-        $this->resource->getContext()->setType($type);
+        $this->resource->getContext()->setFrom($usage);
 
-        return new AsType($this->resource);
+        return new From($this->resource);
     }
 }

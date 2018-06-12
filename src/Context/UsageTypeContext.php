@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Metamorph\Context;
 
+use PhpParser\Node\Expr\Variable;
+
 class UsageTypeContext
 {
     /** @var string */
@@ -25,6 +27,10 @@ class UsageTypeContext
     private $types;
     /** @var string */
     private $usage;
+    /** @var Variable */
+    private $variable;
+    /** @var string[] */
+    private $variableNameForProperty;
 
     public function getClass(): string
     {
@@ -166,13 +172,47 @@ class UsageTypeContext
         return $this->name . ucfirst($this->usage);
     }
 
+    public function getVariableForProperty(string $property): Variable
+    {
+        return new Variable($this->getVariableNameForProperty($property));
+    }
+
+    public function setVariableNameForProperty(string $property, string $value)
+    {
+        $this->variableNameForProperty[$property] = $value;
+    }
+
     public function getVariableNameForProperty(string $property): string
     {
-        $name = $this->properties[$property] . ucfirst($this->usage);
+        if (isset($this->variableNameForProperty[$property])) {
+            return $this->variableNameForProperty[$property];
+        }
+        $name = $this->name . ucfirst($this->properties[$property]) . ucfirst($this->usage);
         if (true === $this->types[$property]['isCollection']) {
             $name .= 'Collection';
         }
 
         return $name;
+    }
+
+    public function getForVariableForProperty(string $property): Variable
+    {
+        return new Variable($this->name . ucfirst($this->properties[$property]) . ucfirst($this->usage));
+    }
+
+    public function getVariable(): Variable
+    {
+        if ($this->variable) {
+            return $this->variable;
+        }
+
+        return new Variable($this->getVariableName());
+    }
+
+    public function setVariable(Variable $variable): UsageTypeContext
+    {
+        $this->variable = $variable;
+
+        return $this;
     }
 }

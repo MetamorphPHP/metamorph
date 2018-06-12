@@ -14,8 +14,14 @@ class Collection extends AbstractResource
 
     public function transform()
     {
+        $transformer = $this->context->getTransformer();
+        $transformed = [];
         foreach ($this->data as $datum) {
             $this->currentData = $datum;
+
+            $transformed[] = $transformer->transform($this);
         }
+
+        return $transformed;
     }
 }

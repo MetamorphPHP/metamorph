@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Metamorph\Resource;
 
+use Closure;
 use Metamorph\Metamorph;
 use Metamorph\TransformerInterface;
 
@@ -16,6 +17,8 @@ class ResourceContext
     private $properties;
     /** @var string */
     private $to;
+    /** @var string */
+    private $type;
 
     public function getFrom(): string
     {
@@ -67,6 +70,26 @@ class ResourceContext
 
     public function getTransformer(): TransformerInterface
     {
+        $getNamespace = function ($type, $to) {
+            return $this->config[$to][$type]['namespace'];
+        };
 
+        $namespace = Closure::bind($getNamespace, $this->metamorph, $this->metamorph)->__invoke($this->type, $this->to);
+
+        $className = $namespace . '\\' . ucfirst($this->type) . ucfirst($this->from) . 'To' . ucfirst($this->to) . 'Transformer';
+
+        return new $className;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): ResourceContext
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

@@ -12,8 +12,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Expression;
 
-class GenerateObjectInitialization
+final class GenerateObjectInitialization
 {
+    /** @var Variable */
+    private $variable;
+
     public function __invoke(TransformerGeneratorContext $context)
     {
         $to = $context->getTo();
@@ -26,24 +29,18 @@ class GenerateObjectInitialization
 
     private function createArrayInitializer(UsageTypeContext $context): Expression
     {
-        $variableName = $context->getVariableName();
-        $variable = new Variable($variableName);
-
         $emptyArray = new Array_();
 
-        $assign = new Assign($variable, $emptyArray);
+        $assign = new Assign($context->getVariable(), $emptyArray);
 
         return new Expression($assign);
     }
 
     private function createObjectInitializer(UsageTypeContext $context): Expression
     {
-        $variableName = $context->getVariableName();
-        $variable = new Variable($variableName);
-
         $newObject = new New_(new Name($context->getClass()));
 
-        $assign = new Assign($variable, $newObject);
+        $assign = new Assign($context->getVariable(), $newObject);
 
         return new Expression($assign);
     }

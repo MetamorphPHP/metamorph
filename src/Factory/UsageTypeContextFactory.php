@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 
-class UsageTypeContextFactory
+final class UsageTypeContextFactory
 {
     /** @var string */
     private $class;
@@ -24,6 +24,8 @@ class UsageTypeContextFactory
     private $isClass;
     /** @var array */
     private $objects = [];
+    /** @var string */
+    private $parent;
     /** @var array */
     private $properties;
     /** @var array */
@@ -52,8 +54,9 @@ class UsageTypeContextFactory
         return $this->create($type->getTo(), $type->getType());
     }
 
-    public function create(string $usage, string $type): UsageTypeContext
+    public function create(string $usage, string $type, string $parent = ''): UsageTypeContext
     {
+        $this->parent = $parent;
         $this->initData($usage, $type);
         $class = $this->getClass();
         $getters = $this->getGetters();
@@ -167,6 +170,9 @@ class UsageTypeContextFactory
         $this->type = $type;
         $this->usage = $usage;
         $this->variableName = $type.ucfirst($usage);
+        if (!empty($this->parent)) {
+            $this->variableName = $this->parent . ucfirst($this->variableName);
+        }
         $this->usageTypeConfig = $this->config[$usage][$type];
         if (!$class = $this->usageTypeConfig['class']) {
             $this->isClass = false;
@@ -200,6 +206,6 @@ class UsageTypeContextFactory
     {
         $factory = new UsageTypeContextFactory($this->config);
 
-        $this->objects[$propertyName] = $factory->create($this->usage, $object);
+        $this->objects[$propertyName] = $factory->create($this->usage, $object, $this->type);
     }
 }

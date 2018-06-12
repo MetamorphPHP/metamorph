@@ -13,7 +13,7 @@ class ResourceContextCest
     public function testGetTransformer(UnitTester $I)
     {
         $config = [
-            'object' => [
+            'array' => [
                 'test' => [
                     'namespace' => 'Tests\Fixture'
                 ]
@@ -21,6 +21,7 @@ class ResourceContextCest
         ];
         $metamorph = new Metamorph($config);
         $context = (new ResourceContext())
+            ->setType('test')
             ->setFrom('object')
             ->setMetamorph($metamorph)
             ->setTo('array');

@@ -49,54 +49,55 @@ class UserArrayToObjectTransformer implements TransformerInterface
     public function transform(AbstractResource $resource)
     {
         $userArray = $resource->getValue();
-        $addressArray = $userArray['address'];
-        $addressObject = new \Tests\Fixture\TestAddress();
-        $addressObject->setCity($addressArray['city']);
-        $addressObject->setState($addressArray['state']);
-        $emailArrayCollection = $userArray['email'];
-        $emailObjectCollection = [];
-        foreach ($emailArrayCollection as $emailArray) {
-            $emailObject = new \Tests\Fixture\TestEmail();
-            $emailObject->setLabel($emailArray['label']);
-            $emailObject->setValue($emailArray['value']);
-            $emailObjectCollection[] = $emailObject;
+        $userAddressArray = $userArray['address'];
+        $userAddressObject = new \Tests\Fixture\TestAddress();
+        $userAddressObject->setCity($userAddressArray['city']);
+        $userAddressObject->setState($userAddressArray['state']);
+        $userEmailArrayCollection = $userArray['email'];
+        $userEmailObjectCollection = [];
+        foreach ($userEmailArrayCollection as $userEmailArray) {
+            $userEmailObject = new \Tests\Fixture\TestEmail();
+            $userEmailObject->setLabel($userEmailArray['label']);
+            $userEmailObject->setValue($userEmailArray['value']);
+            $userEmailObjectCollection[] = $userEmailObject;
         }
         $userObject = new \Tests\Fixture\TestUser();
-        $userArrayBirthday = $userArray['birth_day'];
-        if (empty($userArrayBirthday)) {
-            $userObjectBirthday = null;
+        $userBirth_dayArray = $userArray['birth_day'];
+        if (empty($userBirth_dayArray)) {
+            $userBirthdayObject = null;
         }
         try {
-            if ($userArrayBirthday instanceof \MongoDB\BSON\UTCDateTime) {
-                $userArrayBirthday = $userArrayBirthday->toDateTime();
+            if ($userBirth_dayArray instanceof \MongoDB\BSON\UTCDateTime) {
+                $userBirth_dayArray = $userBirth_dayArray->toDateTime();
             }
-            if ($userArrayBirthday instanceof \Carbon\Carbon) {
-                $userObjectBirthday = $userArrayBirthday;
+            if ($userBirth_dayArray instanceof \Carbon\Carbon) {
+                $userBirthdayObject = $userBirth_dayArray;
             }
-            if ($userArrayBirthday instanceof \DateTime) {
-                $userObjectBirthdayCarbon = new \Carbon\Carbon($userArrayBirthday);
-                $userObjectBirthday = $userObjectBirthdayCarbon;
+            if ($userBirth_dayArray instanceof \DateTime) {
+                $userBirthdayObjectCarbon = new \Carbon\Carbon($userBirth_dayArray);
+                $userBirthdayObject = $userBirthdayObjectCarbon;
             }
-            if (is_string($userArrayBirthday)) {
-                $userObjectBirthdayCarbon = new \Carbon\Carbon($userArrayBirthday);
-                $userObjectBirthday = $userObjectBirthdayCarbon;
+            if (is_string($userBirth_dayArray)) {
+                $userBirthdayObjectCarbon = new \Carbon\Carbon($userBirth_dayArray);
+                $userBirthdayObject = $userBirthdayObjectCarbon;
             }
-        } catch (\Exception $userObjectBirthdayE) {
+        } catch (\Exception $userBirthdayObjectE) {
             throw new \Metamorph\Exception\TransformException('Failed to transform userArrayBirthday because Carbon.');
         }
-        $userObjectFavoriteNumbers = [];
-        $userArrayFavoriteNumbers = $userArray['favoriteNumbers'];
-        foreach ($userArrayFavoriteNumbers as $something) {
-            $userObjectFavoriteNumbers[] = $userArrayFavoriteNumbers;
+        $userFavoriteNumbersArrayCollection = $userArray['favoriteNumbers'];
+        $userFavoriteNumbersObjectCollection = [];
+        foreach ($userFavoriteNumbersArrayCollection as $userFavoriteNumbersArray) {
+            $userFavoriteNumbersObject = (int) $userFavoriteNumbersArray;
+            $userFavoriteNumbersObjectCollection[] = $userFavoriteNumbersObject;
         }
-        $userArrayId = $userArray['_id'];
-        $userObjectId = \Ramsey\Uuid\Uuid::fromString($userArrayId);
-        $userObject->setAddress($addressObject);
+        $user_idArray = $userArray['_id'];
+        $userIdObject = \Ramsey\Uuid\Uuid::fromString($user_idArray);
+        $userObject->setAddress($userAddressObject);
         $userObject->setAllowed($userArray['allowed']);
-        $userObject->birthday = $userObjectBirthday;
-        $userObject->setEmail($emailObjectCollection);
-        $userObject->setFavoriteNumbers($userObjectFavoriteNumbers);
-        $userObject->setId($userObjectId);
+        $userObject->birthday = $userBirthdayObject;
+        $userObject->setEmail($userEmailObjectCollection);
+        $userObject->setFavoriteNumbers($userFavoriteNumbersObjectCollection);
+        $userObject->setId($userIdObject);
         $userObject->setQualified($userArray['qualified']);
         $userObject->setUsername($userArray['username']);
         return $userObject;

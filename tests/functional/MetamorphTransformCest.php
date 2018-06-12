@@ -6,6 +6,8 @@ namespace Tests\Functional;
 use Carbon\Carbon;
 use Faker\Factory as Faker;
 use FunctionalTester;
+use Metamorph\Context\TransformerType;
+use Metamorph\Generator\TransformerGenerator;
 use Metamorph\Metamorph;
 use Metamorph\Resource\Collection;
 use Ramsey\Uuid\Uuid;
@@ -83,6 +85,15 @@ class MetamorphTransformCest
                 ->setUsername($datum['username'])
                 ->birthday = new Carbon($datum['birth_day']);
         }
+
+        $generator = new TransformerGenerator(TestConfigNormalized::get());
+
+        $transformerType = (new TransformerType())
+            ->setFrom('array')
+            ->setTo('object')
+            ->setType('user');
+
+        $generator->generateType($transformerType);
     }
 
     public function testTransformCollection(FunctionalTester $I)
@@ -92,7 +103,7 @@ class MetamorphTransformCest
 
         $resource = new Collection($this->collectionData);
 
-        $transformedData = $transformer->transform($resource)->from('array')->to('object');
+        $transformedData = $transformer->transform($resource)->as('user')->from('array')->to('object');
 
         $I->assertEquals($this->expectedData, $transformedData);
     }
