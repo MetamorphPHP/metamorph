@@ -248,4 +248,7 @@ Documentation to write still ...
 * Transformations
 * configuration for classes, target namespace and location for transformers, location of tranformations, usage configuration
 * command to build transformer
-* 
+
+To Do:
+-----
+* allow for specified properties to be returned, like happens in a GraphQL query.
