@@ -22,9 +22,9 @@ Your default objects are set in the `objects` value. It is assumed the default i
 ```php
 $config = [
   'genData' => 
-    'objects'      => [
-      'user'    => [
-        'class'      => 'TestUser',
+    'objects' => [
+      'user' => [
+        'class' => 'TestUser',
       ],
     ],
   ],
@@ -33,10 +33,10 @@ $config = [
 You'll need to identify the properties in the class, do that with a `properties` key and an associative array of properties. The name of the property should be the key and the attributes of the property are contained in that key. You can have a `scalar` value, like a `string` or `int`. That would be configured like this
 ```php
 $config = [
-  'genData' => 
-    'objects'      => [
-      'user'    => [
-        'class'      => 'TestUser',
+  'genData' => [
+    'objects' => [
+      'user' => [
+        'class' => 'TestUser',
         'properties' => [
           'allowed' => [
             'scalar' => 'bool',
@@ -50,7 +50,7 @@ $config = [
 The property could be the value of a configured object, like an email. The config would look like this
 ```php
 $config = [
-  'genData' => 
+  'genData' => [
     'objects' => [
       'user' => [
         'class' => 'User',
@@ -81,7 +81,7 @@ $config = [
 If you wanted to have more than one email address in the property, you could set `isCollection` to `true`. You configuration would now look like this.
 ```php
 $config = [
-  'genData' => 
+  'genData' => [
     'objects' => [
       'user' => [
         'class' => 'User',
@@ -115,7 +115,7 @@ The `email` property of the `User` class will now be treated like an array in th
 The final type that a property could be is a fully qualified class. An example might be using a uuid for the id of the class. You would have a `class` key with the fully qualified class name one of the property attributes.
 ```php
 $config = [
-  'genData' => 
+  'genData' => [
     'objects' => [
       'user' => [
         'class' => 'User',
@@ -147,3 +147,22 @@ $config = [
   ],
 ];
 ```
+You'll want to transform the data from and to different sources. You might have the data come in an http request as JSON that is decoded to an array. The client side may have different property name. For example, the client side property is called `is_allowed` instead of `allowed`. We are going to need to have configuration for transformation. We do that with a `transformer` key and an array of usages. For this case, we'll call the useage `request`. Our config would look like this
+```php
+$config = [
+  'genData' => [
+    'objects' => [ ... ],
+    'transformers' => [
+      'request' => [
+        'class' => null,
+        'properties' => [
+          'allowed' => [
+            'name' => 'is_allowed'
+          ],
+        ],
+      ],
+    ],
+  ],
+];
+```
+Notice the class type was set to `null`. This means the request is expected to be an array.
