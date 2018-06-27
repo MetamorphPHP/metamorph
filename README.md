@@ -166,3 +166,80 @@ $config = [
 ];
 ```
 Notice the class type was set to `null`. This means the request is expected to be an array.
+
+You may need to have the proprety value transformed from one type to another. These types be `class`es, `object`s, or `scalar`s, like with the object configuration. An example of this might be the uuid being a string an not an object when it is in the request.
+```php
+$config = [
+  'genData' => [
+    'objects' => [ ... ],
+    'transformers' => [
+      'request' => [
+        'class' => null,
+        'properties' => [
+          'allowed' => [
+            'name' => 'is_allowed'
+          ],
+          'id' => [
+            'scalar' => 'string'
+          ],
+        ],
+      ],
+    ],
+  ],
+];
+```
+A value can be transformed in different ways, depending on the the direction the transformation is happening. For example, for a date, you might be willing to transform from any format coming in, but only an ISO8601 on the way out. You would configure that like this.
+```php
+$config = [
+  'genData' => [
+    'objects' => [ ... ],
+    'transformers' => [
+      'request' => [
+        'class' => null,
+        'properties' => [
+          'allowed' => [
+            'name' => 'is_allowed'
+          ],
+          'birthday' => [
+            '_from' => ['format' => 'inclusiveDateTime'],
+            '_to' => ['format' => 'ISO8601'],
+          ],
+          'id' => [
+            'scalar' => 'string'
+          ],
+        ],
+      ],
+    ],
+  ],
+];
+```
+But wait! There is no birthday in the object! That's ok, when the `request` is being tranformed to the `object`, the data will just be ignored.
+Any properties that have the same property name and data type can be ignored in the transformer configuration. If there are any properties in the object that should not be included in the tranformed usage, you can simply `exclude` them. 
+
+```php
+$config = [
+  'genData' => [
+    'objects' => [ ... ],
+    'transformers' => [
+      'request' => [
+        'class' => null,
+        'exclude' => [
+          'email',
+        ],
+        'properties' => [
+          'allowed' => [
+            'name' => 'is_allowed'
+          ],
+          'birthday' => [
+            '_from' => ['format' => 'inclusiveDateTime'],
+            '_to' => ['format' => 'ISO8601'],
+          ],
+          'id' => [
+            'scalar' => 'string'
+          ],
+        ],
+      ],
+    ],
+  ],
+];
+```
