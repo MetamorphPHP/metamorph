@@ -243,3 +243,9 @@ $config = [
   ],
 ];
 ```
+Documentation to write still ...
+-----
+* Transformations
+* configuration for classes, target namespace and location for transformers, location of tranformations, usage configuration
+* command to build transformer
+* 
