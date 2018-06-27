@@ -48,11 +48,12 @@ $config = [
 ];
 ```
 The property could be the value of a configured object, like an email. The config would look like this
+```php
 $config = [
   'genData' => 
-    'objects'      => [
-      'user'    => [
-        'class'      => 'User',
+    'objects' => [
+      'user' => [
+        'class' => 'User',
         'properties' => [
           'allowed' => [
             'scalar' => 'bool',
@@ -62,7 +63,76 @@ $config = [
           ],
         ],
       ],
-      'email'  => [
+      'email' => [
+        'class' => 'Email',
+        'properties' => [
+          'label' => [
+            'scalar' => 'string',
+          ],
+          'value' => [
+            'scalar' => 'string',
+          ],  
+        ],
+      ],
+    ],
+  ],
+];
+```
+If you wanted to have more than one email address in the property, you could set `isCollection` to `true`. You configuration would now look like this.
+```php
+$config = [
+  'genData' => 
+    'objects' => [
+      'user' => [
+        'class' => 'User',
+        'properties' => [
+          'allowed' => [
+            'scalar' => 'bool',
+          ],
+          'email' => [
+            'isCollection' => true,
+            'object' => 'email',
+          ],
+        ],
+      ],
+      'email' => [
+        'class' => 'Email',
+        'properties' => [
+          'label' => [
+            'scalar' => 'string',
+          ],
+          'value' => [
+            'scalar' => 'string',
+          ],  
+        ],
+      ],
+    ],
+  ],
+];
+```
+The `email` property of the `User` class will now be treated like an array in the generated transformer.
+
+The final type that a property could be is a fully qualified class. An example might be using a uuid for the id of the class. You would have a `class` key with the fully qualified class name one of the property attributes.
+```php
+$config = [
+  'genData' => 
+    'objects' => [
+      'user' => [
+        'class' => 'User',
+        'properties' => [
+          'allowed' => [
+            'scalar' => 'bool',
+          ],
+          'email' => [
+            'isCollection' => true,
+            'object' => 'email',
+          ],
+          'id'=> [
+            'class' => 'Ramsey\Uuid',
+          ],
+        ],
+      ],
+      'email' => [
         'class' => 'Email',
         'properties' => [
           'label' => [
