@@ -3,6 +3,12 @@ Metamorph
 
 Transform your data
 
+Install
+-------
+```
+composer require metamorph/metamorph
+```
+
 Usage
 -----
 ```php
