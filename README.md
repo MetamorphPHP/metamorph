@@ -134,7 +134,7 @@ $config = [
             'object' => 'email',
           ],
           'id'=> [
-            'class' => 'Ramsey\Uuid',
+              'class' => \Ramsey\Uuid\Uuid::class,
           ],
         ],
       ],
