@@ -21,6 +21,7 @@
     "ramsy/uuid": "Uuid transformation"
   },
   "minimum-stability": "dev",
+  "bin": ["morph"],
   "autoload": {
     "psr-4": {
       "Metamorph\\": "src/"

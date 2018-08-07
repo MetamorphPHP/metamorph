@@ -292,15 +292,27 @@ $config = [
 ```
 
 `transformations` are directories to classes that will covert between data types and formats.
-`usages` are the ways data can be transformed. It is congigured by setting the usage as the key and the vlaue is an array
-of usages it can get transformed to. In each of the usuages is the object label of what is tobe transformed.
+`usages` are the ways data can be transformed. It is configured by setting the usage as the key and the value is an array
+of usages it can get transformed to. In each of the usages is the object label of what is tobe transformed.
 
+Generate the Transformers
+-------------------------
+
+```
+morph generate
+```
+
+This will read from `resources/metamorph` by default. If you want to read from a different directory then
+you can set the path in the command
+
+```
+morph generate --path=/home/path/config
+```
 
 Documentation to write still ...
 -----
 * Transformations
-* configuration for classes, target namespace and location for transformers, location of tranformations, usage configuration
-* command to build transformer
+* configuration for classes, target namespace and location for transformers, location of transformations, usage configuration
 
 To Do:
 -----
