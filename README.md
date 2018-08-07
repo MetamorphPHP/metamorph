@@ -249,6 +249,53 @@ $config = [
   ],
 ];
 ```
+
+Configure for Generation
+------------------------
+
+```php
+$config = [
+  'genData' => [
+    'objects' => [ ... ],
+    'transformers' => [ ... ],
+    'config'       => [
+      'entities' => [
+        '_path'      => __DIR__.'/../../_support/Fixture',
+        '_namespace' => 'Tests\Fixture',
+      ],
+      'transformers' => [
+        '_path'      => __DIR__.'/../../_support/Fixture/Transformer',
+        '_namespace' => 'Tests\Fixture\Transformer',
+        'address'    => [
+          '_path'      => __DIR__.'/../../_support/Fixture/Transformer/User',
+          '_namespace' => 'Tests\Fixture\Transformer\User',
+        ],
+      ],
+      'transformations' => [
+        __DIR__.'/Transformation',
+      ],
+      'usage' => [
+        'object' => [
+          'array' => [
+            'user',
+          ],
+        ],
+        'array' => [
+          'object' => [
+            'user',
+          ],
+        ],
+      ],
+    ],
+  ],
+];
+```
+
+`transformations` are directories to classes that will covert between data types and formats.
+`usages` are the ways data can be transformed. It is congigured by setting the usage as the key and the vlaue is an array
+of usages it can get transformed to. In each of the usuages is the object label of what is tobe transformed.
+
+
 Documentation to write still ...
 -----
 * Transformations

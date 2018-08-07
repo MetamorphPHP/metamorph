@@ -155,7 +155,7 @@ class TestConfigNormalized
                             'name' => 'birth_day',
                             'type' => [
                                 '_from' => ['format' => 'inclusiveDateTime'],
-                                '_to' => ['format' => 'Iso8601'],
+                                '_to' => ['format' => 'ISO8601'],
                             ],
                         ],
                         'email'   => [

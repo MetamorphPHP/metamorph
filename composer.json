@@ -7,7 +7,8 @@
   "require": {
     "php": ">=7.1",
     "nikic/php-parser": "^4.0@dev",
-    "zendframework/zend-config-aggregator": "^1.1@dev"
+    "zendframework/zend-config-aggregator": "^1.1@dev",
+    "zendframework/zend-config": "^3.2@dev"
   },
   "require-dev": {
     "codeception/codeception": "^2.3.8",
@@ -27,6 +28,7 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "Tests\\Acceptance\\": "tests/acceptance",
       "Tests\\Fixture\\": "tests/_support/Fixture",
       "Tests\\Functional\\": "tests/functional",
       "Tests\\Unit\\": "tests/unit"
