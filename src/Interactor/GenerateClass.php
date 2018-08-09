@@ -25,6 +25,8 @@ class GenerateClass
         $prettyPrinter = new Standard(['shortArraySyntax' => true]);
         $results = $prettyPrinter->prettyPrintFile([$namespace]);
 
+        (new EstablishPath)($context->getTo()->getPath());
+        
         $filePath = $context->getTo()->getPath() . '/' . $this->getClassNameString($context) . '.php';
 
         file_put_contents($filePath, $results);
