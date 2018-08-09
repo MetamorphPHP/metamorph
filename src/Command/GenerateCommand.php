@@ -25,7 +25,7 @@ final class GenerateCommand extends Command
                 'p',
                 InputOption::VALUE_REQUIRED,
                 'The location of the config files',
-                getcwd() . '/resource/metamorph/'
+                getcwd() . '/resources/metamorph/'
             );
     }
 
