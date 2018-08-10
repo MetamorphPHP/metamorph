@@ -93,7 +93,7 @@ class MetamorphConfigFactory
         foreach ($this->objects as $object) {
             $className = $config['objects'][$object]['class'];
             $namespace = $entityConfig[$object]['_namespace'] ?? $defaultNamespace;
-            $this->entityClasses[$object] = '\\'.$namespace.'\\'.$className;
+            $this->entityClasses[$object] = $namespace.'\\'.$className;
         }
 
     }

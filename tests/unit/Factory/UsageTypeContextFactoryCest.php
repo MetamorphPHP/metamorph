@@ -14,6 +14,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Tests\Fixture\TestAddress;
 use Tests\Fixture\TestConfigNormalized;
+use Tests\Fixture\TestEmail;
 use Tests\Fixture\TestUser;
 use UnitTester;
 
@@ -48,32 +49,61 @@ class UsageTypeContextFactoryCest
     private function expectedObjectContext(): UsageTypeContext
     {
         $getters = [
-            'address'   => new MethodCall(new Variable('userObject'), new Identifier('getAddress')),
-            'allowed'   => new MethodCall(new Variable('userObject'), new Identifier('isAllowed')),
-            'birthday'  => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
-            'id'        => new MethodCall(new Variable('userObject'), new Identifier('getId')),
-            'username'  => new MethodCall(new Variable('userObject'), new Identifier('getUsername')),
+            'address'         => new MethodCall(new Variable('userObject'), new Identifier('getAddress')),
+            'allowed'         => new MethodCall(new Variable('userObject'), new Identifier('isAllowed')),
+            'birthday'        => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
+            'email'           => new MethodCall(new Variable('userObject'), new Identifier('getEmail')),
+            'favoriteNumbers' => new MethodCall(new Variable('userObject'), new Identifier('getFavoriteNumbers')),
+            'id'              => new MethodCall(new Variable('userObject'), new Identifier('getId')),
+            'username'        => new MethodCall(new Variable('userObject'), new Identifier('getUsername')),
         ];
         $properties = [
-            'address'   => 'address',
-            'allowed'   => 'allowed',
-            'birthday'  => 'birthday',
-            'id'        => 'id',
-            'username'  => 'username',
+            'address'         => 'address',
+            'allowed'         => 'allowed',
+            'birthday'        => 'birthday',
+            'email'           => 'email',
+            'favoriteNumbers' => 'favoriteNumbers',
+            'id'              => 'id',
+            'username'        => 'username',
         ];
         $setters = [
-            'address'   => [new Variable('userObject'), new Identifier('setAddress')],
-            'allowed'   => [new Variable('userObject'), new Identifier('setAllowed')],
-            'birthday'  => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
-            'id'        => [new Variable('userObject'), new Identifier('setId')],
-            'username'  => [new Variable('userObject'), new Identifier('setUsername')],
+            'address'         => [new Variable('userObject'), new Identifier('setAddress')],
+            'allowed'         => [new Variable('userObject'), new Identifier('setAllowed')],
+            'birthday'        => new PropertyFetch(new Variable('userObject'), new Identifier('birthday')),
+            'email'           => [new Variable('userObject'), new Identifier('setEmail')],
+            'favoriteNumbers' => [new Variable('userObject'), new Identifier('setFavoriteNumbers')],
+            'id'              => [new Variable('userObject'), new Identifier('setId')],
+            'username'        => [new Variable('userObject'), new Identifier('setUsername')],
         ];
         $types = [
-            'address'   => ['object' => 'address'],
-            'allowed'   => ['scalar' => 'bool'],
-            'birthday'  => ['class' => 'Carbon\Carbon'],
-            'id'        => ['class' => 'Ramsey\Uuid'],
-            'username'  => ['scalar' => 'string'],
+            'address'         => [
+                'isCollection' => false,
+                'object'       => 'address',
+            ],
+            'allowed'         => [
+                'isCollection' => false,
+                'scalar'       => 'bool',
+            ],
+            'birthday'        => [
+                'class'        => 'Carbon\Carbon',
+                'isCollection' => false,
+            ],
+            'email'           => [
+                'isCollection' => true,
+                'object'       => 'email',
+            ],
+            'favoriteNumbers' => [
+                'isCollection' => true,
+                'scalar'       => 'int',
+            ],
+            'id'              => [
+                'class'        => 'Ramsey\Uuid',
+                'isCollection' => false,
+            ],
+            'username'        => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
         ];
 
         return (new UsageTypeContext())
@@ -89,73 +119,153 @@ class UsageTypeContextFactoryCest
             ->setUsage('object');
     }
 
-    private function expectedObjectObjects():array
+    private function expectedObjectObjects(): array
     {
-        $getters = [
-            'city'   => new MethodCall(new Variable('addressObject'), new Identifier('getCity')),
-            'state'   => new MethodCall(new Variable('addressObject'), new Identifier('getState')),
-            'zip'        => new MethodCall(new Variable('addressObject'), new Identifier('getZip')),
+        $addressGetters = [
+            'city'  => new MethodCall(new Variable('userAddressObject'), new Identifier('getCity')),
+            'state' => new MethodCall(new Variable('userAddressObject'), new Identifier('getState')),
+            'zip'   => new MethodCall(new Variable('userAddressObject'), new Identifier('getZip')),
         ];
 
-        $properties = [
-            'city'   => 'city',
-            'state'   => 'state',
-            'zip'  => 'zip',
+        $addressProperties = [
+            'city'  => 'city',
+            'state' => 'state',
+            'zip'   => 'zip',
         ];
 
-        $setters = [
-            'city'   => [new Variable('addressObject'), new Identifier('setCity')],
-            'state'   => [new Variable('addressObject'), new Identifier('setState')],
-            'zip'        => [new Variable('addressObject'), new Identifier('setZip')],
+        $addressSetters = [
+            'city'  => [new Variable('userAddressObject'), new Identifier('setCity')],
+            'state' => [new Variable('userAddressObject'), new Identifier('setState')],
+            'zip'   => [new Variable('userAddressObject'), new Identifier('setZip')],
         ];
-        $types = [
-            'city' => ['scalar' => 'string'],
-            'state' => ['scalar' => 'string'],
-            'zip' => ['scalar' => 'string'],
+        $addressTypes = [
+            'city'  => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'state' => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'zip'   => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+        ];
+        $emailGetters = [
+            'label'  => new MethodCall(new Variable('userEmailObject'), new Identifier('getLabel')),
+            'value' => new MethodCall(new Variable('userEmailObject'), new Identifier('getValue')),
         ];
 
-        return [ 'address' => (new UsageTypeContext())
-            ->setClass(TestAddress::class)
-            ->setGetters($getters)
-            ->setName('address')
-            ->setNamespace('Tests\Fixture\Transformer\User')
-            ->setObjects([])
-            ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer/User'))
-            ->setProperties($properties)
-            ->setSetters($setters)
-            ->setTypes($types)
-            ->setUsage('object')];
+        $emailProperties = [
+            'label'  => 'label',
+            'value' => 'value',
+        ];
+
+        $emailSetters = [
+            'label'  => [new Variable('userEmailObject'), new Identifier('setLabel')],
+            'value' => [new Variable('userEmailObject'), new Identifier('setValue')],
+        ];
+        $emailTypes = [
+            'label'  => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'value' => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+        ];
+
+        return [
+            'address' => (new UsageTypeContext())
+                ->setClass(TestAddress::class)
+                ->setGetters($addressGetters)
+                ->setName('address')
+                ->setNamespace('Tests\Fixture\Transformer\User')
+                ->setObjects([])
+                ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer').'/User')
+                ->setProperties($addressProperties)
+                ->setSetters($addressSetters)
+                ->setTypes($addressTypes)
+                ->setUsage('object'),
+            'email' => (new UsageTypeContext())
+                ->setClass(TestEmail::class)
+                ->setGetters($emailGetters)
+                ->setName('email')
+                ->setNamespace('Tests\Fixture\Transformer')
+                ->setObjects([])
+                ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer'))
+                ->setProperties($emailProperties)
+                ->setSetters($emailSetters)
+                ->setTypes($emailTypes)
+                ->setUsage('object'),
+        ];
     }
 
     private function expectedArrayContext(): UsageTypeContext
     {
         $getters = [
-            'address'   => new ArrayDimFetch(new Variable('userArray'), new String_('address')),
-            'allowed'   => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
-            'birthday'  => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
-            'id'        => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
-            'username'  => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
+            'address'         => new ArrayDimFetch(new Variable('userArray'), new String_('address')),
+            'allowed'         => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
+            'birthday'        => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
+            'email'           => new ArrayDimFetch(new Variable('userArray'), new String_('email')),
+            'favoriteNumbers' => new ArrayDimFetch(new Variable('userArray'), new String_('favoriteNumbers')),
+            'id'              => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
+            'username'        => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
         ];
         $properties = [
-            'address'   => 'address',
-            'allowed'   => 'allowed',
-            'birthday'  => 'birth_day',
-            'id'        => '_id',
-            'username'  => 'username',
+            'address'         => 'address',
+            'allowed'         => 'allowed',
+            'birthday'        => 'birth_day',
+            'email'           => 'email',
+            'favoriteNumbers' => 'favoriteNumbers',
+            'id'              => '_id',
+            'username'        => 'username',
         ];
         $setters = [
-            'address'   => new ArrayDimFetch(new Variable('userArray'), new String_('address')),
-            'allowed'   => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
-            'birthday'  => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
-            'id'        => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
-            'username'  => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
+            'address'         => new ArrayDimFetch(new Variable('userArray'), new String_('address')),
+            'allowed'         => new ArrayDimFetch(new Variable('userArray'), new String_('allowed')),
+            'birthday'        => new ArrayDimFetch(new Variable('userArray'), new String_('birth_day')),
+            'email'           => new ArrayDimFetch(new Variable('userArray'), new String_('email')),
+            'favoriteNumbers' => new ArrayDimFetch(new Variable('userArray'), new String_('favoriteNumbers')),
+            'id'              => new ArrayDimFetch(new Variable('userArray'), new String_('_id')),
+            'username'        => new ArrayDimFetch(new Variable('userArray'), new String_('username')),
         ];
         $types = [
-            'address'   => ['object' => 'address'],
-            'allowed'   => ['scalar' => 'bool'],
-            'birthday'  => ['format' => 'ISO8601'],
-            'id'        => ['scalar' => 'string'],
-            'username'  => ['scalar' => 'string'],
+            'address'         => [
+                'isCollection' => false,
+                'object'       => 'address',
+            ],
+            'allowed'         => [
+                'isCollection' => false,
+                'scalar'       => 'bool',
+            ],
+            'birthday'        => [
+                'isCollection' => false,
+                '_from'        => [
+                    'format' => 'inclusiveDateTime',
+                ],
+                '_to'          => [
+                    'format' => 'ISO8601',
+                ],
+            ],
+            'email'           => [
+                'isCollection' => true,
+                'object'       => 'email',
+            ],
+            'favoriteNumbers' => [
+                'isCollection' => true,
+                'scalar'       => 'string',
+            ],
+            'id'              => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'username'        => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
         ];
 
         return (new UsageTypeContext())
@@ -173,35 +283,75 @@ class UsageTypeContextFactoryCest
 
     private function expectedArrayObjects(): array
     {
-        $getters = [
-            'city'   => new ArrayDimFetch(new Variable('addressArray'), new String_('city')),
-            'state'   => new ArrayDimFetch(new Variable('addressArray'), new String_('state')),
+        $addressGetters = [
+            'city'  => new ArrayDimFetch(new Variable('userAddressArray'), new String_('city')),
+            'state' => new ArrayDimFetch(new Variable('userAddressArray'), new String_('state')),
         ];
-        $properties = [
-            'city'   => 'city',
-            'state'   => 'state',
+        $addressProperties = [
+            'city'  => 'city',
+            'state' => 'state',
         ];
-        $setters = [
-            'city'   => new ArrayDimFetch(new Variable('addressArray'), new String_('city')),
-            'state'   => new ArrayDimFetch(new Variable('addressArray'), new String_('state')),
+        $addressSetters = [
+            'city'  => new ArrayDimFetch(new Variable('userAddressArray'), new String_('city')),
+            'state' => new ArrayDimFetch(new Variable('userAddressArray'), new String_('state')),
         ];
-        $types = [
-            'city' => ['scalar' => 'string'],
-            'state' => ['scalar' => 'string'],
+        $addressTypes = [
+            'city'  => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'state' => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+        ];
+        $emailGetters = [
+            'label' => new ArrayDimFetch(new Variable('userEmailArray'), new String_('label')),
+            'value' => new ArrayDimFetch(new Variable('userEmailArray'), new String_('value')),
+        ];
+        $emailProperties = [
+            'label' => 'label',
+            'value' => 'value',
+        ];
+        $emailSetters = [
+            'label' => new ArrayDimFetch(new Variable('userEmailArray'), new String_('label')),
+            'value' => new ArrayDimFetch(new Variable('userEmailArray'), new String_('value')),
+        ];
+        $emailTypes = [
+            'label'  => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
+            'value' => [
+                'isCollection' => false,
+                'scalar'       => 'string',
+            ],
         ];
 
         return [
             'address' => (new UsageTypeContext())
                 ->setClass(null)
-                ->setGetters($getters)
+                ->setGetters($addressGetters)
                 ->setName('address')
                 ->setNamespace('Tests\Fixture\Transformer\User')
                 ->setObjects([])
-                ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer/User'))
-                ->setProperties($properties)
-                ->setSetters($setters)
-                ->setTypes($types)
+                ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer').'/User')
+                ->setProperties($addressProperties)
+                ->setSetters($addressSetters)
+                ->setTypes($addressTypes)
                 ->setUsage('array'),
+            'email'   => (new UsageTypeContext())
+                ->setClass(null)
+                ->setGetters($emailGetters)
+                ->setName('email')
+                ->setNamespace('Tests\Fixture\Transformer')
+                ->setObjects([])
+                ->setPath(realpath(__DIR__.'/../../_support/Fixture/Transformer'))
+                ->setProperties($emailProperties)
+                ->setSetters($emailSetters)
+                ->setTypes($emailTypes)
+                ->setUsage('array'),
+
         ];
     }
 }

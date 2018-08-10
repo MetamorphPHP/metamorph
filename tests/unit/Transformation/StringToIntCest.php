@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Transformation;
 
+use Metamorph\Transformation\StringToInt;
 use UnitTester;
 
 class StringToIntCest

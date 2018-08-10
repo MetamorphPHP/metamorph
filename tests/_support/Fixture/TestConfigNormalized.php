@@ -25,7 +25,7 @@ class TestConfigNormalized
             ],
             'object' => [
                 'user'    => [
-                    'class'      => '\Tests\Fixture\TestUser',
+                    'class'      => 'Tests\Fixture\TestUser',
                     'namespace'  => 'Tests\Fixture\Transformer',
                     'path'       => __DIR__.'/Transformer',
                     'properties' => [
@@ -81,7 +81,7 @@ class TestConfigNormalized
                     ],
                 ],
                 'address' => [
-                    'class'      => '\Tests\Fixture\TestAddress',
+                    'class'      => 'Tests\Fixture\TestAddress',
                     'path'       => __DIR__.'/Transformer/User',
                     'namespace'  => 'Tests\Fixture\Transformer\User',
                     'properties' => [
@@ -109,7 +109,7 @@ class TestConfigNormalized
                     ],
                 ],
                 'email' => [
-                    'class'      => '\Tests\Fixture\TestEmail',
+                    'class'      => 'Tests\Fixture\TestEmail',
                     'path'       => __DIR__.'/Transformer',
                     'namespace'  => 'Tests\Fixture\Transformer',
                     'properties' => [
