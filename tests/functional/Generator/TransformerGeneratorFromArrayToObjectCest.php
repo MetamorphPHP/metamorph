@@ -13,7 +13,7 @@ class TransformerGeneratorFromArrayToObjectCest
 {
     public function _before(FunctionalTester $I)
     {
-        $I->clearGeneratorDirectory();
+        $I->clearTransformerDirectory();
     }
 
     public function testClassGeneration(FunctionalTester $I)

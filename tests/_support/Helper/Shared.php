@@ -5,7 +5,7 @@ namespace Helper;
 
 abstract class Shared extends \Codeception\Module
 {
-    public function clearGeneratorDirectory()
+    public function clearTransformerDirectory()
     {
         $path = realpath(__DIR__ . '/../Fixture/Transformer') . '/';
         $handle = opendir($path);
@@ -112,7 +112,7 @@ class UserObjectToArrayTransformer implements TransformerInterface
         $userAddressArray['city'] = $userAddressObject->getCity();
         $userAddressArray['state'] = $userAddressObject->getState();
         foreach ($this->excludedAddressProperties as $propertyToUnset) {
-            unset($addressArray[$propertyToUnset]);
+            unset($userAddressArray[$propertyToUnset]);
         }
         $userEmailObjectCollection = $userObject->getEmail();
         $userEmailArrayCollection = [];
@@ -121,7 +121,7 @@ class UserObjectToArrayTransformer implements TransformerInterface
             $userEmailArray['label'] = $userEmailObject->getLabel();
             $userEmailArray['value'] = $userEmailObject->getValue();
             foreach ($this->excludedEmailProperties as $propertyToUnset) {
-                unset($emailArray[$propertyToUnset]);
+                unset($userEmailArray[$propertyToUnset]);
             }
             $userEmailArrayCollection[] = $userEmailArray;
         }

@@ -3,6 +3,8 @@ Metamorph
 
 Transform your data
 
+[![CircleCI](https://circleci.com/gh/MetamorphPHP/metamorph/tree/master.svg?style=svg)](https://circleci.com/gh/MetamorphPHP/metamorph/tree/master)
+
 Install
 -------
 ```

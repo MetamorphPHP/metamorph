@@ -43,24 +43,24 @@ class MetamorphTransformCest
             $numberCount = 0;
             $favoriteNumbers = [];
             do {
-                $favoriteNumbers[] = (string) rand(0, 100);
+                $favoriteNumbers[] = (string)rand(0, 100);
                 $numberCount++;
             } while ($numberCount < $totalNumbers);
 
             $this->arrayData[] = [
-                'address' => [
-                    'city' => $faker->city,
+                'address'         => [
+                    'city'  => $faker->city,
                     'state' => $faker->state,
                 ],
-                'allowed' => $faker->boolean,
-                'birth_day' => $faker->iso8601,
-                'email' => $emails,
+                'allowed'         => $faker->boolean,
+                'birth_day'       => $faker->iso8601,
+                'email'           => $emails,
                 'favoriteNumbers' => $favoriteNumbers,
-                '_id' => $faker->uuid,
-                'username' => $faker->userName,
+                '_id'             => $faker->uuid,
+                'username'        => $faker->userName,
             ];
             $x++;
-        } while  ($x < 2);
+        } while ($x < 2);
 
         foreach ($this->arrayData as $datum) {
             $address = (new TestAddress())
@@ -75,7 +75,7 @@ class MetamorphTransformCest
             }
             $favoriteNumbers = [];
             foreach ($datum['favoriteNumbers'] as $number) {
-                $favoriteNumbers[] = (int) $number;
+                $favoriteNumbers[] = (int)$number;
             }
             $user = (new TestUser())
                 ->setAddress($address)
@@ -88,7 +88,11 @@ class MetamorphTransformCest
 
             $this->objectData[] = $user;
         }
+    }
 
+    public function _before(FunctionalTester $I)
+    {
+        $I->clearTransformerDirectory();
         $generator = new TransformerGenerator(TestConfigNormalized::get());
 
         $transformerType = (new TransformerType())

@@ -25,7 +25,7 @@ class GeneratePropertyUnsetProcess
         $propertyFetch = new PropertyFetch($thisVariable, $identifier);
 
         $propertyToUnset = new Variable('propertyToUnset');
-        $unsetVariables[] = new ArrayDimFetch(new Variable($to->getVariableName()), $propertyToUnset);
+        $unsetVariables[] = new ArrayDimFetch($to->getVariable(), $propertyToUnset);
         $statements[] = new Unset_($unsetVariables);
         $subNodes = [
             'stmts' => $statements,

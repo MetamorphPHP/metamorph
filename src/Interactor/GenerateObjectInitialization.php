@@ -38,7 +38,7 @@ final class GenerateObjectInitialization
 
     private function createObjectInitializer(UsageTypeContext $context): Expression
     {
-        $newObject = new New_(new Name($context->getClass()));
+        $newObject = new New_(new Name('\\' . $context->getClass()));
 
         $assign = new Assign($context->getVariable(), $newObject);
 

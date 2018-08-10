@@ -9,7 +9,7 @@ final class MorphCest
 {
     public function _before(AcceptanceTester $I)
     {
-        $I->clearGeneratorDirectory();
+        $I->clearTransformerDirectory();
     }
 
     public function testCommand(AcceptanceTester $I)
