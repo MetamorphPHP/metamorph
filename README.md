@@ -210,7 +210,7 @@ $config = [
           ],
           'birthday' => [
             '_from' => ['format' => 'inclusiveDateTime'],
-            '_to' => ['format' => 'ISO8601'],
+            '_to' => ['format' => 'Iso8601'],
           ],
           'id' => [
             'scalar' => 'string'
@@ -240,7 +240,7 @@ $config = [
           ],
           'birthday' => [
             '_from' => ['format' => 'inclusiveDateTime'],
-            '_to' => ['format' => 'ISO8601'],
+            '_to' => ['format' => 'Iso8601'],
           ],
           'id' => [
             'scalar' => 'string'

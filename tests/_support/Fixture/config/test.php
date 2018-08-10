@@ -90,7 +90,7 @@ return [
                     'properties' => [
                         'birthday' => [
                             '_from' => ['format' => 'inclusiveDateTime'],
-                            '_to'   => ['format' => 'ISO8601'],
+                            '_to'   => ['format' => 'Iso8601'],
                             'name'  => 'birth_day',
                         ],
                         'favoriteNumbers' => [

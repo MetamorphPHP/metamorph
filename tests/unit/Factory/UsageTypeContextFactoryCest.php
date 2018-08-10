@@ -247,7 +247,7 @@ class UsageTypeContextFactoryCest
                     'format' => 'inclusiveDateTime',
                 ],
                 '_to'          => [
-                    'format' => 'ISO8601',
+                    'format' => 'Iso8601',
                 ],
             ],
             'email'           => [

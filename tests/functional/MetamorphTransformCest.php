@@ -53,7 +53,7 @@ class MetamorphTransformCest
                     'state' => $faker->state,
                 ],
                 'allowed'         => $faker->boolean,
-                'birth_day'       => $faker->iso8601,
+                'birth_day'       => (new Carbon($faker->iso8601))->toIso8601String(),
                 'email'           => $emails,
                 'favoriteNumbers' => $favoriteNumbers,
                 '_id'             => $faker->uuid,

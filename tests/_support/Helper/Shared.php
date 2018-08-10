@@ -126,6 +126,8 @@ class UserObjectToArrayTransformer implements TransformerInterface
             $userEmailArrayCollection[] = $userEmailArray;
         }
         $userArray = [];
+        $userBirthdayObject = $userObject->birthday;
+        $userBirth_dayArray = $userBirthdayObject->toIso8601String();
         $userFavoriteNumbersObjectCollection = $userObject->getFavoriteNumbers();
         $userFavoriteNumbersArrayCollection = [];
         foreach ($userFavoriteNumbersObjectCollection as $userFavoriteNumbersObject) {
