@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Expression;
 
 final class GenerateObjectInitialization
@@ -38,7 +38,7 @@ final class GenerateObjectInitialization
 
     private function createObjectInitializer(UsageTypeContext $context): Expression
     {
-        $newObject = new New_(new Name('\\' . $context->getClass()));
+        $newObject = new New_(new FullyQualified($context->getClass()));
 
         $assign = new Assign($context->getVariable(), $newObject);
 

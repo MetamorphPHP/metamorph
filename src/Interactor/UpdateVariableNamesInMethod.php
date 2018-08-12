@@ -7,7 +7,7 @@ use Metamorph\Context\TransformerGeneratorContext;
 use Metamorph\Context\UsageTypeContext;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
@@ -46,101 +46,122 @@ class UpdateVariableNamesInMethod
 
         $this->replacementVariableNames[$methodVariableName] = $this->fromVariableName;
 
-        $this->replaceInNode($method);
+        $updatedMethod = $this->replaceInNode($method);
 
         $variable = new Variable($this->fromVariableName);
         $assign = new Assign($variable, $this->from->getGetter($this->property));
         $statements[] = new Expression($assign);
 
-        $statements = array_merge($statements, $method->stmts);
+        $statements = array_merge($statements, $updatedMethod->stmts);
 
         return $statements;
     }
 
     private function replaceInChildren($parentNode, $properties)
     {
+        $returnNode = clone $parentNode;
         $subNodes = $parentNode->getSubNodeNames();
         foreach ($properties as $property) {
             if (in_array($property, $subNodes)) {
-                foreach ($parentNode->$property as $node) {
-                    $this->replaceInNode($node);
+                foreach ($parentNode->$property as $position => $node) {
+                    $returnNode->$property[$position] = $this->replaceInNode($node);
                 }
             }
         }
+
+        return $returnNode;
     }
 
     private function replaceFullyQualified($parentNode)
     {
+        $returnNode = clone $parentNode;
+
         if ('Name' === $parentNode->getType()) {
             $identifier = $parentNode->getLast();
-            $parentNode->parts = $this->fullyQualifiedParts[$identifier];
+            $returnNode = new FullyQualified($this->fullyQualifiedParts[$identifier]);
         }
+
+        return $returnNode;
     }
 
     private function replaceVariable($parentNode)
     {
+        $returnNode = clone $parentNode;
+
         if ('Expr_Variable' === $parentNode->getType()) {
             $variableName = $parentNode->name;
             if (!isset($this->replacementVariableNames[$variableName])) {
                 $expandedVariableName = $this->toVariableName.ucfirst($variableName);
                 $this->replacementVariableNames[$variableName] = $expandedVariableName;
             }
-            $parentNode->name = $this->replacementVariableNames[$variableName];
+            $returnNode->name = $this->replacementVariableNames[$variableName];
         }
+
+        return $returnNode;
     }
 
     private function replaceInNode($parentNode)
     {
-        $this->replaceInSingleChild($parentNode, ['cond', 'class', 'else', 'expr', 'finally', 'var']);
-        $this->replaceInChildren($parentNode, ['args', 'catches', 'elseifs', 'types']);
-        $this->replaceInStmts($parentNode);
-        $this->replaceInValue($parentNode);
-        $this->replaceFullyQualified($parentNode);
-        $this->replaceVariable($parentNode);
+        $returnNode = $this->replaceInSingleChild($parentNode, ['cond', 'class', 'else', 'expr', 'finally', 'var']);
+        $returnNode = $this->replaceInChildren($returnNode, ['args', 'catches', 'elseifs', 'types']);
+        $returnNode = $this->replaceInStmts($returnNode);
+        $returnNode = $this->replaceInValue($returnNode);
+        $returnNode = $this->replaceFullyQualified($returnNode);
+        $returnNode = $this->replaceVariable($returnNode);
+
+        return $returnNode;
     }
 
     private function replaceInSingleChild($parentNode, $properties)
     {
+        $returnNode = clone $parentNode;
         $subNodes = $parentNode->getSubNodeNames();
         foreach ($properties as $property) {
             if (in_array($property, $subNodes)) {
                 if (!empty($parentNode->$property)) {
-                    $this->replaceInNode($parentNode->$property);
+                    $returnNode->$property = $this->replaceInNode($parentNode->$property);
                 }
             }
         }
+
+        return $returnNode;
     }
 
     private function replaceInStmts($parentNode)
     {
+        $returnNode = clone $parentNode;
         $subNodes = $parentNode->getSubNodeNames();
 
         if (in_array('stmts', $subNodes)) {
             foreach ($parentNode->stmts as $position => $node) {
                 if ('Stmt_Return' === $node->getType()) {
                     $variable = new Variable($this->toVariableName);
-                    $process = $node->expr;
-                    $this->replaceInNode($process);
+                    $process = $this->replaceInNode($node->expr);
                     $assign = new Assign($variable, $process);
                     $node = new Expression($assign);
-                    $parentNode->stmts[$position] = $node;
+                    $returnNode->stmts[$position] = $node;
                 } else {
-                    $this->replaceInNode($node);
+                    $returnNode->stmts[$position] = $this->replaceInNode($node);
                 }
             }
         }
+
+        return $returnNode;
     }
 
     private function replaceInValue($parentNode)
     {
+        $returnNode = clone $parentNode;
         $subNodes = $parentNode->getSubNodeNames();
 
         if (in_array('value', $subNodes)) {
             $value = $parentNode->value;
             if (!is_string($value)) {
-                $this->replaceInNode($value);
+                $returnNode->value = $this->replaceInNode($value);
             }
         }
+
+        return $returnNode;
     }
 
     private function setNamespaceNode(Namespace_ $namespace)
@@ -151,7 +172,7 @@ class UpdateVariableNamesInMethod
                 foreach ($node->uses as $useNode) {
                     $name = $useNode->name;
                     $identifier = $useNode->getAlias()->name;
-                    $fullyQualifiedName = new Name('\\'.$name->toString());
+                    $fullyQualifiedName = new FullyQualified($name->toString());
                     $this->fullyQualifiedParts[$identifier] = $fullyQualifiedName->parts;
                 }
             }
