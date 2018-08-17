@@ -10,7 +10,7 @@ final class MetamorphFactory
 {
     public function __invoke(ContainerInterface $container): Metamorph
     {
-        $config = (new MetamorphConfigFactory)($container->get('genData'));
+        $config = (new MetamorphConfigFactory)($container->get('config'));
 
         return new Metamorph($config);
     }
