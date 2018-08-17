@@ -14,7 +14,7 @@ class MetamorphConfigFactory
 
     public function __invoke(array $config): array
     {
-        $genConfig = $config['genData'];
+        $genConfig = $config['metamorph'];
 
         $this->setConfig($genConfig);
 

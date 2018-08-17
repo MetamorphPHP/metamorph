@@ -1,6 +1,6 @@
 <?php
 return [
-    'genData' => [
+    'metamorph' => [
         'config'       => [
             'entities'        => [
                 '_path'      => __DIR__.'/..',
