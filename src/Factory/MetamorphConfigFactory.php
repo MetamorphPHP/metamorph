@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Metamorph\Factory;
 
+use InvalidArgumentException;
+
 class MetamorphConfigFactory
 {
     private $entityClasses;
@@ -77,7 +79,10 @@ class MetamorphConfigFactory
     private function setConfig($config)
     {
         $this->objects = array_keys($config['objects']);
-        $this->transformations = $config['config']['transformations'] ?? [];
+        if (empty($config['config']['transformations'])) {
+            throw new InvalidArgumentException('The transformations is not found');
+        }
+        $this->transformations = $config['config']['transformations'];
         $this->usages = $config['config']['usage'] ?? [];
 
         $this->configureEntities($config);
